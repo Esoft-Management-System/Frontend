@@ -1,7 +1,9 @@
+
 import BlueButton from "../../components/common/BlueButton"
 import Textinput from "../../components/common/Textinput"
 
 const ResetPassword = () => {
+
   return (
     <div className="h-screen w-screen flex  items-center justify-center bg-[#EFEFEF]">
       <div className="flex  flex-row min-w-[409px] p-2.5 gap-2.5">
