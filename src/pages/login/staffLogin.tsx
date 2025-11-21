@@ -1,6 +1,12 @@
+import { useNavigate } from "react-router-dom";
 import Textinput from "../../components/common/Textinput";
 
-const staffLogin = () => {
+const StaffLogin = () => {
+	const navigate = useNavigate();
+
+	const goToResetPassword = () => {
+		navigate("/resetpassword");
+	}
 	return (
 		<div className="h-screen w-screen flex items-center justify-center bg-[#EFEFEF]">
 			<div className="flex w-[337px] md:w-[414px] flex-col p-2.5">
@@ -17,7 +23,7 @@ const staffLogin = () => {
 							<p className="text-[#6B7280] text-[11px] font-normal">remember password?</p>
 						</div>
 						<div className="flex flex-row gap-2.5 justify-end items-end flex-1">
-							<p className="text-[#1A73E8] text-[12px] underline hover:cursor-pointer format-normal">forgot password?</p>
+							<p className="text-[#1A73E8] text-[12px] underline hover:cursor-pointer format-normal" onClick={goToResetPassword}>forgot password?</p>
 						</div>
 					</div>
 					<button className="py-4 px-2 md:py-4 md:px-3.5 bg-[#1A73E8] w-full rounded-[10px] text-white font-Medium hover:cursor-pointer">
@@ -32,4 +38,4 @@ const staffLogin = () => {
 	)
 }
 
-export default staffLogin;
+export default StaffLogin;

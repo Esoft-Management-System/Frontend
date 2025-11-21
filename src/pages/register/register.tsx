@@ -1,6 +1,13 @@
+import { useNavigate } from "react-router-dom";
 import Textinput from "../../components/common/Textinput";
 
 const Register = () => {
+
+  const navigate = useNavigate();
+
+  const goToLogin = () => {
+    navigate("/");
+  }
   return(
     <div className="h-screen w-screen flex items-center justify-center bg-[#EFEFEF]">
       <div className="flex w-[414px] md:w-[414px] flex-col p-2.5">
@@ -25,8 +32,8 @@ const Register = () => {
           <button className="py-3 px-3 bg-[#1A73E8] w-full rounded-[10px] text-white font-semibold hover:cursor-pointer">
             Sign Up
           </button>
-          <div className="flex flex-col items-center justify-center w-full">
-            <p className="text-[#6B7280] font-normal text-[12px]">Already have an account?{" "}<span className="text-[#1A73E8] hover:cursor-pointer">Sign In</span></p>
+          <div className="flex flex-col items-center justify-center w-full">  
+            <p className="text-[#6B7280] font-normal text-[12px]">Already have an account?{" "}<span onClick={goToLogin} className="text-[#1A73E8] hover:cursor-pointer">Sign In</span></p>
           </div>
         </div>
       </div>
