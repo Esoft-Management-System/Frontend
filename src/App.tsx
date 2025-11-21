@@ -1,8 +1,8 @@
-import Register from "./pages/register/register";
+import Login from "./pages/login/login";
 
 const App = () => {
   return (
-    <Register />
+    <Login />
   );
 };
 

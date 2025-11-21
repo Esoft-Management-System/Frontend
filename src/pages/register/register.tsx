@@ -8,13 +8,13 @@ const Register = () => {
           <p className="text-[20px] font-semibold text-[#111827]">Student Registration</p>
           <p className="text-[14px] font-normal text-[#6B7280]">Student Registration</p>
           <div className="flex flex-col w-full gap-3">
-            <div className="flex flex-row w-full gap-3">
+            <div className="flex w-full gap-3 flex-col md:flex-row">
               <Textinput placeholder="E-Number" type="text"/>
               <Textinput placeholder="Full Name" type="text"/>
             </div>
-            <div className="flex flex-row w-full gap-3">
+            <div className="flex w-full gap-3 flex-col md:flex-row">
               <Textinput placeholder="Contact Number" type="text"/>
-              <Textinput placeholder="Date of Birth" type="text"/>
+              <Textinput placeholder="Date of Birth" type="date"/>
             </div>
               <Textinput placeholder="NIC" type="text"/>
               <Textinput placeholder="Email" type="email"/>
@@ -22,7 +22,7 @@ const Register = () => {
               <Textinput placeholder="Password" type="Password"/>
               <Textinput placeholder="Confirm Password" type="Password"/>
           </div>
-          <button className="py-3 px-3 bg-[#1A73E8] w-full rounded-[10px] text-white font-semibold hover;curser-pointer">
+          <button className="py-3 px-3 bg-[#1A73E8] w-full rounded-[10px] text-white font-semibold hover:cursor-pointer">
             Sign Up
           </button>
           <div className="flex flex-col items-center justify-center w-full">
