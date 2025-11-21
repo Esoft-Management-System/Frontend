@@ -1,7 +1,10 @@
-import Login from "./pages/login/login"
+import Register from "./pages/register/register";
+
 const App = () => {
   return (
-    <Login/>
-  )
-}
-export default App
+    <Register />
+  );
+};
+
+export default App;
+
