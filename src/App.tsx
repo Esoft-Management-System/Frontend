@@ -1,8 +1,8 @@
 import { Route, Routes } from "react-router-dom";
 import Login from "./pages/login/login"
 import ResetPassword from "./pages/login/ResetPassword";
-import StaffLogin from "./pages/login/StaffLogin";
-import Register from "./pages/register/Register";
+import StaffLogin from "./pages/login/staffLogin";
+import StudentRegister from "./pages/register/StudentRegister";
 
 const App = () => {
   return (
@@ -11,7 +11,7 @@ const App = () => {
         <Route path="/" element = {<Login/>}/>
         <Route path="/resetpassword" element={<ResetPassword/>}/>
         <Route path="/staff" element={<StaffLogin/>}/>
-        <Route path="/studentregister" element={<Register/>}/>
+        <Route path="/studentregister" element={<StudentRegister/>}/>
       </Routes>
     </div>
   );

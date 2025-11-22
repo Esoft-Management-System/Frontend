@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import Textinput from "../../components/common/Textinput";
 import BlueButton from "../../components/common/BlueButton";
 
-const Register = () => {
+const StudentRegister = () => {
 
   const navigate = useNavigate();
 
@@ -40,4 +40,4 @@ const Register = () => {
   )
 }
 
-export default Register;
+export default StudentRegister;
