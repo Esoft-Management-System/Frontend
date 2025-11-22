@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import Textinput from "../../components/common/Textinput";
+import BlueButton from "../../components/common/BlueButton";
 
 const StaffLogin = () => {
 	const navigate = useNavigate();
@@ -26,9 +27,7 @@ const StaffLogin = () => {
 							<p className="text-[#1A73E8] text-[12px] underline hover:cursor-pointer format-normal" onClick={goToResetPassword}>forgot password?</p>
 						</div>
 					</div>
-					<button className="py-4 px-2 md:py-4 md:px-3.5 bg-[#1A73E8] w-full rounded-[10px] text-white font-Medium hover:cursor-pointer">
-						Sign in
-					</button>
+					<BlueButton buttonName="Sign in"/>
 					<div className="flex flex-col items-center justify-center w-full">
 						<p className="text-[#6B7280] font-normal text-[12px]">Don’t have an account? <span className="text-[#1A73E8] hover:cursor-pointer font-normal">Create account</span></p>
 					</div>
