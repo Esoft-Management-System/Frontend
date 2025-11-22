@@ -1,8 +1,8 @@
 import { Route, Routes } from "react-router-dom";
 import Login from "./pages/login/login"
 import ResetPassword from "./pages/login/ResetPassword";
-import StaffLogin from "./pages/login/staffLogin";
-import Register from "./pages/register/register";
+import StaffLogin from "./pages/login/StaffLogin";
+import Register from "./pages/register/Register";
 
 const App = () => {
   return (
