@@ -33,7 +33,7 @@ const Login = () => {
 	}
 
 	const goToResetPassword = () => {
-		navigate("/resetpassword");
+		navigate("/forgotpassword");
 	}
 
 	const goToStudentRegister = () => {

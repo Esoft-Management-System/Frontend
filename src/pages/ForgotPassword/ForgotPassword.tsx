@@ -1,8 +1,12 @@
 
+import { useNavigate } from "react-router-dom"
 import BlueButton from "../../components/common/BlueButton"
 import Textinput from "../../components/common/Textinput"
 
-const ResetPassword = () => {
+const ForgotPassword = () => {
+
+  //set navigation
+  const navigate = useNavigate();
 
   return (
     <div className="h-screen w-screen flex items-center justify-center bg-[#EFEFEF]">
@@ -11,11 +15,11 @@ const ResetPassword = () => {
           <p className="text-[20px] font-semibold text-[#111827] flex-1">Forgot Password</p>
           <p className="text-[14px] font-normal text-[#6B7280] flex-1">Reset your password here</p>
           <Textinput placeholder="Email" type="text" />
-          <BlueButton buttonName="Send OTP"/>
+          <BlueButton onClick={() => navigate("/OTPform")} buttonName="Send OTP"/>
         </div>
       </div>
     </div>
   )
 }
 
-export default ResetPassword
+export default ForgotPassword

@@ -6,7 +6,7 @@ const StaffLogin = () => {
 	const navigate = useNavigate();
 
 	const goToResetPassword = () => {
-		navigate("/resetpassword");
+		navigate("/forgotpassword");
 	}
 	return (
 		<div className="h-screen w-screen flex items-center justify-center bg-[#EFEFEF]">
