@@ -1,5 +1,4 @@
-interface TextInputInterface {
-import type { ChangeEvent } from 'react';
+import type { ChangeEvent } from "react";
 
 interface TextInputInterface{
   placeholder?: string;
