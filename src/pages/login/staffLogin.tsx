@@ -7,7 +7,7 @@ const StaffLogin = () => {
 	const navigate = useNavigate();
 
 	const goToResetPassword = () => {
-		navigate("/resetpassword");
+		navigate("/forgotpassword");
 	}
 	return (
 		<div className="h-screen w-screen flex items-center justify-center bg-[#EFEFEF]">
@@ -30,9 +30,28 @@ const StaffLogin = () => {
 					</div>
 					<BlueButton buttonName="Sign in"/>
 					<div className="flex flex-col items-center justify-center w-full">
-						<p className="text-[#6B7280] font-normal text-[12px]">Don’t have an account? <span onClick={() => navigate("/StaffRequestLogin")} className="text-[#1A73E8] hover:cursor-pointer font-normal">Create account</span></p>
+						<p className="text-[#6B7280] font-normal text-[12px]">Don’t have an account? <span onClick={() => navigate("/StaffRequestLogin")} className="text-[#1A73E8] hover:cursor-pointer font-normal">Request Sign in</span></p>
 					</div>
 				</div>
+
+				<div className="bg-[#FFFFFF] flex-1 flex flex-col md:flex-row gap-3 rounded-xl shadow-sm place-items-start hover:cursor-pointer mt-2">
+					<div className="w-full md:flex-1 p-4 flex items-center justify-center hover:cursor-pointer">
+						<div className="w-full flex flex-col md:flex-row rounded-md overflow-hidden border border-[#E5E7EB] hover:cursor-pointer">
+							<button
+								className={`hover:cursor-pointer w-full md:flex-1 py-2 text-sm font-medium bg-white text-[#374151]`}
+								onClick={() => navigate('/')}
+							>
+								Student
+							</button>
+							<button
+								className={`hover:cursor-pointer w-full md:flex-1 py-2 text-sm font-medium bg-[#1A73E8] text-white`}
+							>
+								Staff
+							</button>
+						</div>
+					</div>
+				</div>
+				
 			</div>
 		</div>
 	)
