@@ -33,13 +33,13 @@ const Login = () => {
 	}
 
 	const goToResetPassword = () => {
-		navigate("/resetpassword");
+		navigate("/forgotpassword");
 	}
 
 	const goToStudentRegister = () => {
 		navigate("/studentregister");
 	}
- 
+
 	return (
 		<div className="h-screen w-screen flex items-center justify-center bg-[#EFEFEF]">
 			<div className="flex w-[337px] md:w-[414px] flex-col p-2.5 gap-2" >				
