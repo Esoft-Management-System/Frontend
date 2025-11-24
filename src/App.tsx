@@ -5,7 +5,7 @@ import StudentRegister from "./pages/register/StudentRegister";
 import StaffRequestLogin from "./pages/login/StaffRequestLogin";
 import OTPform from "./pages/ForgotPassword/OTPform";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
-import Setnewpassword from "./pages/ForgotPassword/Setnewpassword";
+import SetNewPassword from "./pages/ForgotPassword/SetNewPassword";
 
 
 const App = () => {
@@ -18,7 +18,7 @@ const App = () => {
         <Route path="/studentregister" element={<StudentRegister/>}/>
         <Route path="/StaffRequestLogin" element={<StaffRequestLogin/>}/>
         <Route path="/OTPform" element={<OTPform/>}/>
-        <Route path="/Setnewpassword" element={<Setnewpassword/>}/>
+        <Route path="/SetNewPassword" element={<SetNewPassword/>}/>
       </Routes>
     </div>
   );

@@ -1,7 +1,8 @@
+import { useNavigate } from "react-router-dom";
 import Textinput from "../../components/common/Textinput";
 
 const OTPform = () => {
-
+const navigate = useNavigate();
 	return (
 		// <div className="h-screen w-screen flex items-center justify-center bg-[#EFEFEF]">
 		// 	<div className="flex min-w-[337px]  flex-row md:w-[409px] p-2.5 gap-2.5">
@@ -60,7 +61,7 @@ const OTPform = () => {
 					<div className="flex flex-row w-full gap-3">
 
 						<button className="flex flex-row w-full rounded-[10px] border border-[#9CA3AF] py-3.5 items-center justify-center font-medium text-[#9CA3AF] text-[16px] hover:cursor-pointer">Cancel</button>
-						<button className="w-full flex flex-row rounded-[10px] py-3.5 bg-[#1A73E8] justify-center items-center font-medium text-white text-[16px] hover:cursor-pointer">Verify</button>
+						<button onClick={(() => navigate("/SetNewPassword"))} className="w-full flex flex-row rounded-[10px] py-3.5 bg-[#1A73E8] justify-center items-center font-medium text-white text-[16px] hover:cursor-pointer">Verify</button>
 
 					</div>
 
