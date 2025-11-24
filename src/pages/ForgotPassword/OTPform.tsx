@@ -57,7 +57,7 @@ const OTPform = () => {
 
 					</div>
 
-					<div className="flex flex-row w-full gap-3">	
+					<div className="flex flex-row w-full gap-3">
 
 						<button className="flex flex-row w-full rounded-[10px] border border-[#9CA3AF] py-3.5 items-center justify-center font-medium text-[#9CA3AF] text-[16px] hover:cursor-pointer">Cancel</button>
 						<button className="w-full flex flex-row rounded-[10px] py-3.5 bg-[#1A73E8] justify-center items-center font-medium text-white text-[16px] hover:cursor-pointer">Verify</button>
