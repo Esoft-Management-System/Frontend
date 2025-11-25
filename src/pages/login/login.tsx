@@ -9,7 +9,7 @@ const Login = () => {
 
 	const navigate = useNavigate();
 	const [isStaff, setIsStaff] = useState(false);
-	const[formData, setFormData] = useState({
+	const [formData, setFormData] = useState({
 		eNumber: '',
 		password: ''
 	});
@@ -17,8 +17,8 @@ const Login = () => {
 
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
-		setFormData(prev => ({...prev, [name]: value}));
-		setError(prev => ({...prev, [name]: ''}));
+		setFormData(prev => ({ ...prev, [name]: value }));
+		setError(prev => ({ ...prev, [name]: '' }));
 	}
 
 	const handleSignIn = () => {
@@ -42,8 +42,22 @@ const Login = () => {
 
 	return (
 		<div className="h-screen w-screen flex items-center justify-center bg-[#EFEFEF]">
-			<div className="flex w-[337px] md:w-[414px] flex-col p-2.5 gap-2" >				
+			<div className="flex w-[337px] md:w-[414px] flex-col p-2.5 gap-2" >
 				<div className="bg-[#FFFFFF] flex-1 flex flex-col gap-3 p-[15px] md:p-8 rounded-xl shadow-sm place-items-start">
+					<div className="flex flex-row w-full gap-2.5  rounded-3xl justify-center items-center p-1 bg-[#1A73E8]">
+						<button
+								className={`hover:cursor-pointer  rounded-3xl flex-1 py-2 text-sm font-medium ${!isStaff ? 'bg-white text-[#374151]' : 'bg-[#1A73E8] text-white'}`}
+								onClick={() => setIsStaff(false)}
+							>
+								Student
+							</button>
+							<button
+								className={` hover:cursor-pointer  rounded-3xl flex-1 py-2 text-sm font-medium ${isStaff ? 'bg-white text-[#374151]'  : 'bg-[#1A73E8] text-white'}`}
+								onClick={() => navigate('/staff')}
+							>
+								Staff
+							</button>
+					</div>
 					<p className="text-[20px] font-semibold text-[#111827] flex-1">Student</p>
 					<p className="text-[14px] font-normal text-[#6B7280] flex-1">Sign in your account</p>
 					<div className="flex flex-col w-full flex-1 gap-2.5">
@@ -56,7 +70,7 @@ const Login = () => {
 							<p className="text-[#6B7280] text-[12px]">remember password?</p>
 						</div>
 						<div className="flex flex-row gap-2.5 justify-end items-end flex-1">
-							<p className="text-[#1A73E8] text-[14px] underline hover:cursor-pointer" onClick={goToResetPassword}>forgot password?</p>
+							<p className="text-[#1A73E8] text-[12px] underline hover:cursor-pointer" onClick={goToResetPassword}>forgot password?</p>
 						</div>
 					</div>
 					<BlueButton buttonName="Sign in" onClick={handleSignIn} />
@@ -64,7 +78,7 @@ const Login = () => {
 						<p className="text-[#6B7280] font-normal text-[12px]">Don’t have an account? <span onClick={goToStudentRegister} className="text-[#1A73E8] hover:cursor-pointer">Create account</span></p>
 					</div>
 				</div>
-				<div className="bg-[#FFFFFF] flex-1 flex flex-col md:flex-row gap-3  rounded-xl shadow-sm place-items-start hover:cursor-pointer">
+				{/* <div className="bg-[#FFFFFF] flex-1 flex flex-col md:flex-row gap-3  rounded-xl shadow-sm place-items-start hover:cursor-pointer">
 					<div className="w-full md:flex-1 p-4 flex items-center justify-center hover:cursor-pointer">
 						<div className="w-full flex flex-col md:flex-row rounded-md overflow-hidden border border-[#E5E7EB] hover:cursor-pointer">
 							<button
@@ -81,7 +95,7 @@ const Login = () => {
 							</button>
 						</div>
 					</div>
-				</div>
+				</div> */}
 			</div>
 		</div>
 	)
