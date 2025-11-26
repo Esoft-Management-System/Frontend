@@ -7,10 +7,11 @@ interface TextInputInterface{
   error?: string;
   name?: string;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  disbled?: boolean;
 }
 
 const Textinput = (props: TextInputInterface) => {
-    const {placeholder, type, value, error, name, onChange} =  props;
+    const {placeholder, type, value, error, name, onChange, disbled} =  props;
   if (
     type === "textarea"
   ) {
@@ -22,7 +23,7 @@ const Textinput = (props: TextInputInterface) => {
   }
   return (
     <>
-      <input name={name} onChange={onChange} className="border w-full text-sm text-gray-600 border-[#D1D5DB] p-3 focus:outline-none rounded-lg" type={type} placeholder={placeholder} value={value} />
+      <input name={name} onChange={onChange} className="border w-full text-sm text-gray-600 border-[#D1D5DB] p-3 focus:outline-none rounded-lg" type={type} placeholder={placeholder} value={value} disabled={disbled}/>
       {error && <p className="text-red-500 text-xs">{error}</p>}
     </>
   )

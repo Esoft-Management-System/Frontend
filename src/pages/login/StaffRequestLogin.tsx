@@ -1,11 +1,22 @@
 import { useNavigate } from "react-router-dom";
 import BlueButton from "../../components/common/BlueButton";
 import Textinput from "../../components/common/Textinput";
+import { useEffect, useState } from "react";
 
 
 const StaffRequestLogin = () => {
 
   const navigate = useNavigate();
+  const [currentDate, setCurrentDate ] = useState("");
+
+  useEffect(() => {
+    const today = new Date(); // save today date here
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0") 
+    const date = String(today.getDate()).padStart(2, "0") 
+    setCurrentDate(`${year}-${month}-${date}`)
+    console.log(currentDate);
+  }, [])
 
   return (
     <div className="h-screen w-screen flex items-center justify-center bg-[#EFEFEF]">
@@ -19,7 +30,7 @@ const StaffRequestLogin = () => {
               <Textinput placeholder="Staff Name" type="text" />
             </div>
             <div className="flex w-full gap-3 flex-col md:flex-row">
-              <Textinput placeholder="DD:MM:YYYY" type="date" />
+              <Textinput placeholder="DD:MM:YYYY" type="date" value={currentDate} disbled={true}/>
               <Textinput placeholder="Designation" type="text" />
             </div>
             <Textinput placeholder="Email Address" type="email" />
