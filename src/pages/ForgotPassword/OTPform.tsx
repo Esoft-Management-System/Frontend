@@ -11,7 +11,7 @@ const OTPform = () => {
 
 			<div className="flex flex-row max-w-[409px] p-2.5 gap-2.5">
 
-				<div className="w-full bg-[#a78989] p-8 flex flex-col gap-3 shadow-sm rounded-xl items-center justify-center">
+				<div className="w-full bg-[#ffffff] p-8 flex flex-col gap-3 shadow-sm rounded-xl items-center justify-center">
 
 					<p className="text-[20px] font-semibold text-[#111827]">Enter verification code</p>
 					<p className="text-[13px] font-normal text-[#6B7280]">we’ve sent a code to <span className="font-semibold">harishanth08@gmail.com</span></p>
