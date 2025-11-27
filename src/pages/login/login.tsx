@@ -61,8 +61,8 @@ const Login = () => {
 					<p className="text-[20px] font-semibold text-[#111827] flex-1">Student</p>
 					<p className="text-[14px] font-normal text-[#6B7280] flex-1">Sign in your account</p>
 					<div className="flex flex-col w-full flex-1 gap-2.5">
-						<Textinput placeholder="E-Number" type="text" name="eNumber" value={formData.eNumber} onChange={handleChange} error={error.eNumber} />
-						<Textinput placeholder="Password" type="password" name="password" value={formData.password} onChange={handleChange} error={error.password} />
+						<Textinput labelText="E-Number" placeholder="E-Number" type="text" name="eNumber" value={formData.eNumber} onChange={handleChange} error={error.eNumber} />
+						<Textinput labelText="Password" placeholder="Password" type="password" name="password" value={formData.password} onChange={handleChange} error={error.password} />
 					</div>
 					<div className="w-full flex-1 flex flex-row gap-2.5">
 						<div className="flex flex-row gap-2.5 justify-center items-center">

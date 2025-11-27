@@ -26,15 +26,15 @@ const StaffRequestLogin = () => {
           <p className="text-[14px] font-normal text-[#6B7280]">Staff Request Login Access</p>
           <div className="flex flex-col w-full gap-3">
             <div className="flex w-full gap-3 flex-col md:flex-row">
-              <Textinput placeholder="Staff ID" type="text" />
-              <Textinput placeholder ="Staff Name" type="text" />
+              <Textinput labelText="Staff ID" placeholder="Staff ID" type="text" />
+              <Textinput labelText="Staff Name" placeholder ="Staff Name" type="text" />
             </div>
             <div className="flex w-full gap-3 flex-col md:flex-row">
-              <Textinput placeholder="DD:MM:YYYY" type="date" value={currentDate} disbled={true}/>
-              <Textinput placeholder="Designation" type="text" />
+              <Textinput labelText="DD:MM:YYYY" placeholder="DD:MM:YYYY" type="date" value={currentDate} disbled={true}/>
+              <Textinput labelText="DD:MM:YYYY" placeholder="Designation" type="text" />
             </div>
-            <Textinput placeholder="Email Address" type="email" />
-            <Textinput placeholder="Reason for Request" type="textarea" />
+            <Textinput labelText="Email Address" placeholder="Email Address" type="email" />
+            <Textinput labelText="Reason for Request" placeholder="Reason for Request" type="textarea" />
           </div>
           <BlueButton buttonName="Request Your Sign in" />
           <div className="flex flex-col items-center justify-center w-full">

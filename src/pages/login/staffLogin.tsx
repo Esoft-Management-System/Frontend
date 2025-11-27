@@ -29,8 +29,8 @@ const StaffLogin = () => {
 					<p className="text-[20px] font-semibold text-[#111827] flex-1">Staff</p>
 					<p className="text-[14px] font-normal text-[#6B7280] flex-1">Sign in to your account</p>
 					<div className="flex flex-col w-full flex-1 gap-2.5">
-						<Textinput placeholder="Staff ID" type="text" />
-						<Textinput placeholder="Password" type="password" />
+						<Textinput labelText="Staff ID" placeholder="Staff ID" type="text" />
+						<Textinput labelText="Password" placeholder="Password" type="password" />
 					</div>
 					<div className="w-full flex-1 flex flex-row gap-2.5">
 						<div className="flex flex-row gap-2.5 justify-center items-center">

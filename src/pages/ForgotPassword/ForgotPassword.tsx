@@ -14,7 +14,7 @@ const ForgotPassword = () => {
         <div className="w-full flex flex-col bg-white rounded-xl p-3.5 md:p-9 gap-3">
           <p className="text-[20px] font-semibold text-[#111827] flex-1">Forgot Password</p>
           <p className="text-[14px] font-normal text-[#6B7280] flex-1">Reset your password here</p>
-          <Textinput placeholder="Email" type="text" />
+          <Textinput labelText="Email" placeholder="Email" type="text" />
           <BlueButton onClick={() => navigate("/OTPform")} buttonName="Send OTP"/>
         </div>
       </div>

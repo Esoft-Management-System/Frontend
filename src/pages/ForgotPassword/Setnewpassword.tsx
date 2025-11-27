@@ -11,8 +11,8 @@ const SetNewPassword = () => {
 					<p className="text-[20px] font-semibold text-[#111827] flex-1">Set New Password</p>
 					<p className="text-[11px] font-normal text-[#6B7280] flex-1">must be at least 6 charactors </p>
 					<div className="flex flex-col w-full flex-1 gap-2.5">
-						<Textinput placeholder="New Password" type="password" />
-						<Textinput placeholder="Confirm Password" type="password" />
+						<Textinput labelText="New Password" placeholder="New Password" type="password" />
+						<Textinput labelText="Confirm Password" placeholder="Confirm Password" type="password" />
 					</div>
 					<BlueButton buttonName="Set Password" />
 					<div className="flex flex-col items-center justify-center w-full">
