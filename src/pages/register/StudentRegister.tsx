@@ -17,18 +17,19 @@ const StudentRegister = () => {
           <p className="text-[14px] font-normal text-[#6B7280]">Student Registration</p>
           <div className="flex flex-col w-full gap-3">
             <div className="flex w-full gap-3 flex-col md:flex-row">
-              <Textinput placeholder="E-Number" type="text"/>
-              <Textinput placeholder="Full Name" type="text"/>
+              <Textinput labelText="E-Number" placeholder="E-Number" type="text"/>
+              <Textinput labelText="Full Name" placeholder="Full Name" type="text"/>
             </div>
+            
             <div className="flex w-full gap-3 flex-col md:flex-row">
-              <Textinput placeholder="Contact Number" type="text"/>
-              <Textinput placeholder="Date of Birth" type="date"/>
+              <Textinput labelText="Contact Number" placeholder="Contact Number" type="text"/>
+              <Textinput labelText="Date of Birth" placeholder="Date of Birth" type="date"/>
             </div>
-              <Textinput placeholder="NIC" type="text"/>
-              <Textinput placeholder="Email" type="email"/>
-              <Textinput placeholder="Address" type="text"/>
-              <Textinput placeholder="Password" type="Password"/>
-              <Textinput placeholder="Confirm Password" type="Password"/>
+              <Textinput labelText= "NIC" placeholder="NIC" type="text"/>
+              <Textinput labelText="Email" placeholder="Email" type="email"/>
+              <Textinput labelText="Address" placeholder="Address" type="text"/>
+              <Textinput labelText="Password" placeholder="Password" type="Password"/>
+              <Textinput labelText="Confirm Password" placeholder="Confirm Password" type="Password"/>
           </div>
           <BlueButton buttonName="Sign Up"/>
           <div className="flex flex-col items-center justify-center w-full">  

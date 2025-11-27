@@ -27,7 +27,7 @@ const StaffRequestLogin = () => {
           <div className="flex flex-col w-full gap-3">
             <div className="flex w-full gap-3 flex-col md:flex-row">
               <Textinput placeholder="Staff ID" type="text" />
-              <Textinput placeholder="Staff Name" type="text" />
+              <Textinput placeholder ="Staff Name" type="text" />
             </div>
             <div className="flex w-full gap-3 flex-col md:flex-row">
               <Textinput placeholder="DD:MM:YYYY" type="date" value={currentDate} disbled={true}/>
