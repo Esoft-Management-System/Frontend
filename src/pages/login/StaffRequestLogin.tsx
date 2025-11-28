@@ -7,38 +7,41 @@ import { useEffect, useState } from "react";
 const StaffRequestLogin = () => {
 
   const navigate = useNavigate();
-  const [currentDate, setCurrentDate ] = useState("");
-
-  useEffect(() => {
+  const [currentDate, setCurrentDate] = useState(() => {
     const today = new Date(); // save today date here
     const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, "0") 
-    const date = String(today.getDate()).padStart(2, "0") 
-    setCurrentDate(`${year}-${month}-${date}`)
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const date = String(today.getDate()).padStart(2, "0");
+    return `${year}-${month}-${date}`;
+  });
+
+  useEffect(() => {
     console.log(currentDate);
-  }, [])
+  }, [currentDate]);
 
   return (
-    <div className="h-screen w-screen flex items-center justify-center bg-[#EFEFEF]">
-      <div className="flex w-[414px] md:w-[414px] flex-col p-3">
-        <div className="bg-[#FFFFFF] flex-1 flex flex-col gap-3 p-3 md:p-8 rounded-xl">
-          <p className="text-[20px] font-semibold text-[#111827]">Staff Request Login</p>
-          <p className="text-[14px] font-normal text-[#6B7280]">Staff Request Login Access</p>
-          <div className="flex flex-col w-full gap-3">
+    <div className="min-h-screen w-full flex items-center justify-center from-gray-50 to-gray-100 overflow-x-hidden bg-[#EFEFEF]">
+      <div className="flex w-full max-w-md flex-col p-6">
+        <div className="bg-white flex-1 flex flex-col gap-6 p-8 rounded-2xl shadow-lg border border-gray-100">
+          <div className="text-center mb-2">
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">Staff Request Login</h1>
+            <p className="text-gray-600 text-sm">Staff Request Login Access</p>
+          </div>
+          <div className="flex flex-col w-full gap-4">
             <div className="flex w-full gap-3 flex-col md:flex-row">
               <Textinput labelText="Staff ID" placeholder="Staff ID" type="text" />
-              <Textinput labelText="Staff Name" placeholder ="Staff Name" type="text" />
+              <Textinput labelText="Staff Name" placeholder="Staff Name" type="text" />
             </div>
             <div className="flex w-full gap-3 flex-col md:flex-row">
-              <Textinput labelText="DD:MM:YYYY" placeholder="DD:MM:YYYY" type="date" value={currentDate} disbled={true}/>
-              <Textinput labelText="DD:MM:YYYY" placeholder="Designation" type="text" />
+              <Textinput labelText="Date" placeholder="Date" type="date" value={currentDate} disabled={true} />
+              <Textinput labelText="Designation" placeholder="Designation" type="text" />
             </div>
             <Textinput labelText="Email Address" placeholder="Email Address" type="email" />
             <Textinput labelText="Reason for Request" placeholder="Reason for Request" type="textarea" />
           </div>
           <BlueButton buttonName="Request Your Sign in" />
           <div className="flex flex-col items-center justify-center w-full">
-            <p className="text-[#6B7280] font-normal text-[12px]">Already have an Account? <span onClick={(() => navigate("/staff"))} className="text-[#1A73E8] hover:cursor-pointer">Sign In</span></p>
+            <p className="text-gray-600 text-sm">Already have an Account? <span onClick={() => navigate("/staff")} className="text-blue-600 hover:cursor-pointer font-semibold">Sign In</span></p>
           </div>
         </div>
       </div>

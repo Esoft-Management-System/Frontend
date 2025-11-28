@@ -13,22 +13,68 @@ interface TextInputInterface {
 }
 
 const Textinput = (props: TextInputInterface) => {
-  const { placeholder, type, value, error, name, onChange, disbled, disabled,labelText } = props;
-  if (
-    type === "textarea"
-  ) {
-    return (<textarea
-      className="border w-full text-sm text-gray-600 border-[#D1D5DB] p-3 focus:outline-none rounded-lg resize-none"
-      placeholder={placeholder}
-      rows={4}
-    />)
+  const {
+    placeholder,
+    type,
+    value,
+    error,
+    name,
+    onChange,
+    disbled,
+    disabled,
+    labelText
+  } = props;
+
+  const isDisabled = disbled || disabled;
+
+  if (type === "textarea") {
+    return (
+      <div className="flex flex-col gap-2 w-full">
+        {labelText && (
+          <label className="text-gray-700 text-sm font-semibold mb-1">
+            {labelText}
+          </label>
+        )}
+        <textarea
+          className="border w-full text-sm text-gray-800 border-gray-300 
+            px-4 py-3 rounded-lg focus:outline-none transition-all duration-200
+            focus:ring-2 focus:ring-blue-500 focus:border-transparent
+            placeholder-gray-400 resize-none shadow-sm"
+          placeholder={placeholder}
+          rows={4}
+        />
+        {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
+      </div>
+    );
   }
+
   return (
-    <div>
-      {labelText && <label className="text-[#6B7280] font-normal text-[14px] pb-2 flex-colum gap-1">{labelText}</label>}
-      <input name={name} onChange={onChange} className="border w-full text-sm text-gray-600 border-[#D1D5DB] p-3 focus:outline-none rounded-lg" type={type} placeholder={placeholder} value={value} disabled={disbled || disabled} />
-      {error && <p className="text-red-500 text-xs">{error}</p>}
+    <div className="flex flex-col gap-2 w-full">
+      {labelText && (
+        <label className="text-gray-700 text-sm font-semibold mb-1">
+          {labelText}
+        </label>
+      )}
+
+      <input
+        name={name}
+        onChange={onChange}
+        type={type}
+        value={value}
+        disabled={isDisabled}
+        placeholder={placeholder}
+        className={`border w-full text-sm text-gray-800 border-gray-300 
+          px-4 py-3 rounded-lg focus:outline-none transition-all duration-200
+          focus:ring-2 focus:ring-blue-500 focus:border-transparent
+          placeholder-gray-400 shadow-sm
+          ${isDisabled
+            ? "bg-gray-100 cursor-not-allowed opacity-60"
+            : "bg-white hover:border-gray-400"}`}
+      />
+
+      {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
     </div>
-  )
-}
-export default Textinput
+  );
+};
+
+export default Textinput;

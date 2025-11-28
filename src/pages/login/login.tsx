@@ -4,9 +4,7 @@ import type { ChangeEvent } from 'react';
 import BlueButton from "../../components/common/BlueButton";
 import Textinput from "../../components/common/Textinput";
 
-
 const Login = () => {
-
 	const navigate = useNavigate();
 	const [isStaff, setIsStaff] = useState(false);
 	const [formData, setFormData] = useState({
@@ -14,6 +12,7 @@ const Login = () => {
 		password: ''
 	});
 	const [error, setError] = useState<{ eNumber?: string; password?: string }>({});
+	const [rememberMe, setRememberMe] = useState(false);
 
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
@@ -27,7 +26,6 @@ const Login = () => {
 		if (!formData.password || formData.password.trim() === '') errs.password = 'Please enter your password';
 		setError(errs);
 		if (Object.keys(errs).length === 0) {
-			// perform sign-in action
 			console.log('sign in', formData);
 		}
 	}
@@ -41,61 +39,97 @@ const Login = () => {
 	}
 
 	return (
-		<div className="h-screen w-screen flex items-center justify-center bg-[#EFEFEF]">
-			<div className="flex w-[337px] md:w-[414px] flex-col p-2.5 gap-2" >
-				<div className="bg-[#FFFFFF] flex-1 flex flex-col gap-3 p-[15px] md:p-8 rounded-xl shadow-sm place-items-start">
-					<div className="flex flex-row w-full gap-2.5  rounded-3xl justify-center items-center p-1 bg-[#1A73E8]">
+		<div className="min-h-screen w-full flex items-center justify-center from-gray-50 to-gray-100 overflow-x-hidden">
+			<div className="flex w-full max-w-md flex-col p-6">
+				<div className="bg-white flex-1 flex flex-col gap-6 p-8 rounded-2xl shadow-lg border border-gray-100">
+					{/* Header Section */}
+					<div className="text-center mb-2">
+						<h1 className="text-2xl font-bold text-gray-900 mb-2">Welcome Back</h1>
+						<p className="text-gray-600 text-sm">Sign in to your student account</p>
+					</div>
+
+					{/* Role Selector */}
+					<div className="flex w-full gap-1 rounded-2xl p-1 bg-gray-100 border border-gray-200">
 						<button
-								className={`hover:cursor-pointer  rounded-3xl flex-1 py-2 text-sm font-medium ${!isStaff ? 'bg-white text-[#374151]' : 'bg-[#1A73E8] text-white'}`}
-								onClick={() => setIsStaff(false)}
-							>
-								Student
-							</button>
+							className={`flex-1 py-3 text-sm font-semibold rounded-xl transition-all duration-200 ${!isStaff
+								? 'bg-white text-gray-900 shadow-sm border border-gray-200'
+								: 'text-gray-600 hover:text-gray-800'
+								}`}
+							onClick={() => setIsStaff(false)}
+						>
+							Student
+						</button>
+						<button
+							className={`flex-1 py-3 text-sm font-semibold rounded-xl transition-all duration-200 ${isStaff
+								? 'bg-white text-gray-900 shadow-sm border border-gray-200'
+								: 'text-gray-600 hover:text-gray-800'
+								}`}
+							onClick={() => navigate('/staff')}
+						>
+							Staff
+						</button>
+					</div>
+
+					{/* Form Section */}
+					<div className="flex flex-col w-full gap-4">
+						<Textinput
+							labelText="E-Number"
+							placeholder="Enter your E-Number"
+							type="text"
+							name="eNumber"
+							value={formData.eNumber}
+							onChange={handleChange}
+							error={error.eNumber}
+						/>
+						<Textinput
+							labelText="Password"
+							placeholder="Enter your password"
+							type="password"
+							name="password"
+							value={formData.password}
+							onChange={handleChange}
+							error={error.password}
+						/>
+					</div>
+
+					{/* Remember Me & Forgot Password */}
+					<div className="flex items-center justify-between">
+						<div className="flex items-center gap-2">
+							<input
+								type="checkbox"
+								checked={rememberMe}
+								onChange={(e) => setRememberMe(e.target.checked)}
+								className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2 hover:cursor-pointer"
+							/>
+							<p className="text-gray-700 text-sm font-medium">Remember me</p>
+						</div>
+						<button
+							onClick={goToResetPassword}
+							className="text-blue-600 text-sm font-medium hover:text-blue-700 transition-colors duration-200"
+						>
+							Forgot password?
+						</button>
+					</div>
+
+					{/* Sign In Button */}
+					<BlueButton
+						buttonName="Sign in"
+						onClick={handleSignIn}
+					/>
+
+					{/* Sign Up Link */}
+					<div className="text-center pt-2">
+						<p className="text-gray-600 text-sm">
+							Don't have an account?{" "}
 							<button
-								className={` hover:cursor-pointer  rounded-3xl flex-1 py-2 text-sm font-medium ${isStaff ? 'bg-white text-[#374151]'  : 'bg-[#1A73E8] text-white'}`}
-								onClick={() => navigate('/staff')}
+								onClick={goToStudentRegister}
+								className="text-blue-600 font-semibold hover:text-blue-700 transition-colors duration-200"
 							>
-								Staff
+								Create account
 							</button>
-					</div>
-					<p className="text-[20px] font-semibold text-[#111827] flex-1">Student</p>
-					<p className="text-[14px] font-normal text-[#6B7280] flex-1">Sign in your account</p>
-					<div className="flex flex-col w-full flex-1 gap-2.5">
-						<Textinput labelText="E-Number" placeholder="E-Number" type="text" name="eNumber" value={formData.eNumber} onChange={handleChange} error={error.eNumber} />
-						<Textinput labelText="Password" placeholder="Password" type="password" name="password" value={formData.password} onChange={handleChange} error={error.password} />
-					</div>
-					<div className="w-full flex-1 flex flex-row gap-2.5">
-						<div className="flex flex-row gap-2.5 justify-center items-center">
-							<input type="checkbox" className="hover:cursor-pointer w-4 h-4 border-[#D1D5DB]" />
-							<p className="text-[#6B7280] text-[12px]">remember password?</p>
-						</div>
-						<div className="flex flex-row gap-2.5 justify-end items-end flex-1">
-							<p className="text-[#1A73E8] text-[12px] underline hover:cursor-pointer" onClick={goToResetPassword}>forgot password?</p>
-						</div>
-					</div>
-					<BlueButton buttonName="Sign in" onClick={handleSignIn} />
-					<div className="flex flex-col items-center justify-center w-full">
-						<p className="text-[#6B7280] font-normal text-[12px]">Don’t have an account? <span onClick={goToStudentRegister} className="text-[#1A73E8] hover:cursor-pointer">Create account</span></p>
+						</p>
 					</div>
 				</div>
-				{/* <div className="bg-[#FFFFFF] flex-1 flex flex-col md:flex-row gap-3  rounded-xl shadow-sm place-items-start hover:cursor-pointer">
-					<div className="w-full md:flex-1 p-4 flex items-center justify-center hover:cursor-pointer">
-						<div className="w-full flex flex-col md:flex-row rounded-md overflow-hidden border border-[#E5E7EB] hover:cursor-pointer">
-							<button
-								className={`hover:cursor-pointer flex-1 py-2 text-sm font-medium ${!isStaff ? 'bg-[#1A73E8] text-white' : 'bg-white text-[#374151]'}`}
-								onClick={() => setIsStaff(false)}
-							>
-								Student
-							</button>
-							<button
-								className={` hover:cursor-pointer flex-1 py-2 text-sm font-medium ${isStaff ? 'bg-[#1A73E8] text-white' : 'bg-white text-[#374151]'}`}
-								onClick={() => navigate('/staff')}
-							>
-								Staff
-							</button>
-						</div>
-					</div>
-				</div> */}
 			</div>
 		</div>
 	)

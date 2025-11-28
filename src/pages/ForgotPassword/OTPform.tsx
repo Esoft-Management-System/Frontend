@@ -1,45 +1,51 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import OtpInput from "../../components/common/OtpInput";
+import BlueButton from "../../components/common/BlueButton";
 
 const OTPform = () => {
 	const navigate = useNavigate();
 	const [otp, setOtp] = useState("");
 	const isComplete = otp.length === 6;
 	return (
-		<div className="w-screen h-screen bg-[#EFEFEF] flex items-center justify-center">
+		<div className="min-h-screen w-full flex items-center justify-center from-gray-50 to-gray-100 overflow-x-hidden bg-[#EFEFEF]">
 
-			<div className="flex flex-row max-w-[409px] p-2.5 gap-2.5">
+				<div className="flex w-full max-w-md p-6">
 
-				<div className="w-full bg-[#ffffff] p-8 flex flex-col gap-3 shadow-sm rounded-xl items-center justify-center">
+					<div className="w-full bg-white p-8 flex flex-col gap-4 shadow-lg rounded-2xl items-center justify-center border border-gray-100">
 
-					<p className="text-[20px] font-semibold text-[#111827]">Enter verification code</p>
-					<p className="text-[13px] font-normal text-[#6B7280]">we’ve sent a code to <span className="font-semibold">harishanth08@gmail.com</span></p>
+						<p className="text-2xl font-semibold text-gray-900">Enter verification code</p>
+						<p className="text-sm text-gray-600">we’ve sent a code to <span className="font-semibold">harishanth08@gmail.com</span></p>
 
-					<OtpInput otpLength={6} onOtpChange={(val) => setOtp(val)} />
+						<OtpInput otpLength={6} onOtpChange={(val) => setOtp(val)} />
 
-					<div className="w-full p-2.5 flex flex-row items-center justify-center">
+						<div className="w-full p-2.5 flex flex-row items-center justify-center">
 
-						<p className="text-[13px] font-normal text-[#6B7280]">Didn’t get a code? <span className="font-semibold text-black hover:cursor-pointer">Click to resend.</span></p>
+							<p className="text-sm text-gray-600">Didn’t get a code? <span className="font-semibold text-black hover:cursor-pointer">Click to resend.</span></p>
 
-					</div>
+						</div>
 
-					<div className="flex flex-row w-full gap-3">
+						<div className="flex flex-row w-full gap-3">
+							<button
+								onClick={() => navigate("/")}
+								className="py-3.5 px-6 w-full rounded-xl text-gray-700 font-semibold bg-white hover:bg-gray-50 border border-gray-300 flex items-center justify-center shadow-sm transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-gray-100"
+							>
+								Cancel
+							</button>
 
-						<button onClick={() => navigate("/")} className="flex flex-row w-full rounded-[10px] border border-[#9CA3AF] py-3.5 items-center justify-center font-medium text-[#9CA3AF] text-[16px] hover:cursor-pointer">Cancel</button>
-						<button onClick={() => navigate("/SetNewPassword")}
-							disabled={!isComplete}
-							className={`w-full flex flex-row rounded-[10px] py-3.5 justify-center items-center font-medium text-[16px] ${isComplete ? 'bg-[#1A73E8] text-white hover:cursor-pointer' : 'bg-[#E5E7EB] text-[#9CA3AF] cursor-not-allowed'}`}>
-							Verify
-						</button>
+							<BlueButton
+								onClick={() => navigate("/SetNewPassword")}
+								disabled={!isComplete}
+								buttonName="Verify"
+							/>
+
+						</div>
 
 					</div>
 
 				</div>
 
 			</div>
-
-		</div>
 	);
 };
 
