@@ -105,13 +105,13 @@ const OtpInput = ({ otpLength = 6, onOtpChange, disbled, disabled }: OtpInputPro
   };
 
   const getInputClassName = (idx: number) => {
-    const baseClasses = "w-12 h-12 text-center text-lg border rounded-lg focus:outline-none transition-colors duration-200";
+    const baseClasses = "w-12 h-12 text-center text-lg border rounded-lg focus:outline-none transition-colors duration-200 px-3 py-2 text-gray-800 placeholder-gray-400 shadow-sm";
 
     if (values[idx] || focusedIndex === idx) {
-      return `${baseClasses} border-blue-500 focus:border-blue-500`;
+      return `${baseClasses} ring-2 ring-blue-500 border-transparent`;
     }
 
-    return `${baseClasses} border-[#D1D5DB] focus:border-blue-500`;
+    return `${baseClasses} border-gray-300 bg-white hover:border-gray-400`;
   };
 
   return (
