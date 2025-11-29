@@ -1,19 +1,19 @@
 import { useNavigate } from "react-router-dom";
 import BlueButton from "../../components/common/BlueButton";
 import Textinput from "../../components/common/Textinput";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 
 const StaffRequestLogin = () => {
 
   const navigate = useNavigate();
-  const [currentDate, setCurrentDate] = useState(() => {
+  const currentDate = (() => {
     const today = new Date(); // save today date here
     const year = today.getFullYear();
     const month = String(today.getMonth() + 1).padStart(2, "0");
     const date = String(today.getDate()).padStart(2, "0");
     return `${year}-${month}-${date}`;
-  });
+  })();
 
   useEffect(() => {
     console.log(currentDate);
