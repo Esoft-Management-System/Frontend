@@ -1,9 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import studentReducer from "./slices/studentSlice";
+import staffReducer from "./slices/staffSlice";
+
 
 export const store = configureStore({
   reducer: {
-    student: studentReducer
+    student: studentReducer,
+    staff: staffReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
