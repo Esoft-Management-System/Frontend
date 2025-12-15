@@ -1,7 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
+import studentReducer from "./slices/studentSlice";
 
 export const store = configureStore({
-  reducer: {},
+  reducer: {
+    student: studentReducer
+  },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: true,

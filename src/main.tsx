@@ -2,7 +2,7 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
 import { BrowserRouter } from 'react-router-dom'
-import { RTKProvider } from './redux/provider.ts'
+import { RTKProvider } from './redux/provider.tsx'
 
 createRoot(document.getElementById('root')!).render(
   // <StrictMode>
@@ -10,7 +10,7 @@ createRoot(document.getElementById('root')!).render(
   // </StrictMode>,
   <BrowserRouter>
     <RTKProvider>
-       <App />
+      <App />
     </RTKProvider>
   </BrowserRouter>
 )
