@@ -115,3 +115,5 @@ class APIRequest {
     return { status: response.status, data: response.data };
   }
 }
+
+export default APIRequest;

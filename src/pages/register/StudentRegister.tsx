@@ -1,8 +1,18 @@
 import { useNavigate } from "react-router-dom";
 import Textinput from "../../components/common/Textinput";
 import BlueButton from "../../components/common/BlueButton";
+import { useEffect } from "react";
+import { studentService } from "../../services/student.service";
 
 const StudentRegister = () => {
+
+  useEffect(() => {
+    studentService.getStudentReg().then((res) => {
+      console.log("Student Reg API response:", res);
+    }).catch((error) => {
+      console.error("Student Reg API error:", error);
+    })
+  }, []);
 
   const navigate = useNavigate();
 
