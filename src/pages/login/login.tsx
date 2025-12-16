@@ -105,7 +105,7 @@ const Login = () => {
 						</div>
 						<button
 							onClick={goToResetPassword}
-							className="text-blue-600 text-sm font-medium hover:text-blue-700 transition-colors duration-200"
+							className="text-blue-600 hover:cursor-pointer text-sm font-medium hover:text-blue-700 transition-colors duration-200"
 						>
 							Forgot password?
 						</button>
@@ -123,7 +123,7 @@ const Login = () => {
 							Don't have an account?{" "}
 							<button
 								onClick={goToStudentRegister}
-								className="text-blue-600 font-semibold hover:text-blue-700 transition-colors duration-200"
+								className="text-blue-600 hover:cursor-pointer font-semibold hover:text-blue-700 transition-colors duration-200"
 							>
 								Create account
 							</button>

@@ -110,7 +110,7 @@ const StaffLogin = () => {
 						</div>
 						<button
 							onClick={goToResetPassword}
-							className="text-blue-600 text-sm font-medium hover:text-blue-700 transition-colors duration-200"
+							className="text-blue-600 text-sm hover:cursor-pointer font-medium hover:text-blue-700 transition-colors duration-200"
 						>
 							Forgot password?
 						</button>
@@ -128,7 +128,7 @@ const StaffLogin = () => {
 							Don&apos;t have an account?{" "}
 							<button
 								onClick={goToRequest}
-								className="text-blue-600 font-semibold hover:text-blue-700 transition-colors duration-200"
+								className="text-blue-600 hover:cursor-pointer font-semibold hover:text-blue-700 transition-colors duration-200"
 							>
 								Request Sign in
 							</button>
