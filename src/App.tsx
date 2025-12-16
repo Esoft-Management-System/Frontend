@@ -8,6 +8,7 @@ import StaffRequestLogin from "./pages/login/StaffRequestLogin";
 import OTPform from "./pages/ForgotPassword/OTPform";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
 import SetNewPassword from "./pages/ForgotPassword/Setnewpassword";
+import StudentDashboard from "./pages/dashboard/StudentDashboard";
 
 
 const App = () => {
@@ -21,6 +22,7 @@ const App = () => {
         <Route path="/StaffRequestLogin" element={<StaffRequestLogin />} />
         <Route path="/OTPform" element={<OTPform />} />
         <Route path="/SetNewPassword" element={<SetNewPassword />} />
+        <Route path="/dashboard/student" element={<StudentDashboard />} />
       </Routes>
       <ToastContainer position="top-right" autoClose={4000} theme="colored" />
     </div>

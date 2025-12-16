@@ -1,15 +1,32 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import type { IStudent, IStudentState } from "../interfaces/student";
+import { createAsyncThunk, createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import type { IStudent, IStudentLogin, IStudentLoginResponse, IStudentState } from "../interfaces/student";
 import { studentService } from "../../services/student.service";
+import { STUDENT_TOKEN_KEY, STUDENT_DATA_KEY } from "../../services/api-request";
 
-//initial state
 const initialState: IStudentState = {
   data: [],
   loading: false,
   error: null,
+  authToken: null,
+  currentStudent: null,
 };
 
-//Async thunk: Register new student
+export const loginStudent = createAsyncThunk(
+  "students/loginStudent",
+  async (loginData: IStudentLogin, { rejectWithValue }) => {
+    try {
+      const response = await studentService.loginStudent(loginData);
+      return response.data as IStudentLoginResponse;
+    } catch (error: any) {
+      const message =
+        error?.response?.data?.message ??
+        error?.message ??
+        "Login failed. Please check your credentials.";
+      return rejectWithValue(message);
+    }
+  }
+);
+
 export const registerStudent = createAsyncThunk(
   "students/registerStudent",
   async (studentData: IStudent, { rejectWithValue, getState }) => {
@@ -24,12 +41,7 @@ export const registerStudent = createAsyncThunk(
       const response = await studentService.registerStudent(studentData);
       return response.data;
     } catch (error: any) {
-      const message =
-        error?.response?.data?.message ??
-        error?.message ??
-        error?.response?.data?.message ??
-        error?.message ??
-        "Student registration failed";
+      const message = error?.response?.data?.message ?? error?.message ?? "Student registration failed";
       return rejectWithValue(message);
     }
   }
@@ -43,26 +55,58 @@ const studentSlice = createSlice({
       state.loading = false;
       state.error = null;
     },
-  },
-
-  extraReducers: (builder) => {
-    builder.addCase(registerStudent.pending, (state) => {
-      state.loading = true;
-      state.error = null;
-    });
-    builder.addCase(registerStudent.fulfilled, (state, action) => {
-      state.loading = false;
-      state.error = null;
-      if (action.payload) {
-        state.data = [...state.data, action.payload as IStudent];
+    logoutStudent: (state) => {
+      state.authToken = null;
+      state.currentStudent = null;
+      localStorage.removeItem(STUDENT_TOKEN_KEY);
+      localStorage.removeItem(STUDENT_DATA_KEY);
+      sessionStorage.removeItem(STUDENT_TOKEN_KEY);
+      sessionStorage.removeItem(STUDENT_DATA_KEY);
+    },
+    initializeStudentAuth: (state) => {
+      const token = localStorage.getItem(STUDENT_TOKEN_KEY) || sessionStorage.getItem(STUDENT_TOKEN_KEY);
+      const studentData = localStorage.getItem(STUDENT_DATA_KEY) || sessionStorage.getItem(STUDENT_DATA_KEY);
+      if (token && studentData) {
+        state.authToken = token;
+        state.currentStudent = JSON.parse(studentData);
       }
-    });
-    builder.addCase(registerStudent.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload as string;
-    });
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(loginStudent.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(loginStudent.fulfilled, (state, action: PayloadAction<IStudentLoginResponse>) => {
+        state.loading = false;
+        state.error = null;
+        state.authToken = action.payload.token;
+        state.currentStudent = action.payload.student;
+      })
+      .addCase(loginStudent.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+        state.authToken = null;
+        state.currentStudent = null;
+      })
+      .addCase(registerStudent.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(registerStudent.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        if (action.payload) {
+          state.data = [...state.data, action.payload as IStudent];
+        }
+      })
+      .addCase(registerStudent.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      });
   },
 });
 
-export const { resetStudentState } = studentSlice.actions;
+export const { resetStudentState, logoutStudent, initializeStudentAuth } = studentSlice.actions;
 export default studentSlice.reducer;
