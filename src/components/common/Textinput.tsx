@@ -27,6 +27,8 @@ const Textinput = (props: TextInputInterface) => {
 
   const isDisabled = disbled || disabled;
 
+
+  //ragavi here i gonna change the text area part
   if (type === "textarea") {
     return (
       <div className="flex flex-col gap-2 w-full">
@@ -36,6 +38,9 @@ const Textinput = (props: TextInputInterface) => {
           </label>
         )}
         <textarea
+          name={name}
+          onChange={(e: any) => onChange?.(e)}
+          value={value}
           className="border w-full text-sm text-gray-800 border-gray-300 
             px-4 py-3 rounded-lg focus:outline-none transition-all duration-200
             focus:ring-2 focus:ring-blue-500 focus:border-transparent

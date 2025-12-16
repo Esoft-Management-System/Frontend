@@ -19,6 +19,7 @@ export const registerStudent = createAsyncThunk(
     } catch (error: any) {
       const message =
         error?.response?.data?.message ??
+        error?.message ??error?.response?.data?.message ??
         error?.message ??
         "Student registration failed";
       return rejectWithValue(message);
