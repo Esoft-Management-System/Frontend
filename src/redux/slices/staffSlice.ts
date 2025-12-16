@@ -1,11 +1,25 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import type { IStaff, IStaffState } from "../interfaces/staff";
+import {
+  createAsyncThunk,
+  createSlice,
+} from "@reduxjs/toolkit";
+import type {
+  IStaff,
+  IStaffLogin,
+  IStaffLoginApiResponse,
+  IStaffLoginResponse,
+  IStaffState,
+} from "../interfaces/staff";
 import { staffService } from "../../services/staff.service";
+import { STAFF_DATA_KEY, STAFF_TOKEN_KEY } from "../../services/api-request";
+
+const STAFF_TEMP_TOKEN_KEY = "staffTemporaryToken";
 
 const initialState: IStaffState = {
   data: [],
   loading: false,
   error: null,
+  authToken: null,
+  currentStaff: null,
 };
 
 // Async thunk: Register new staff
@@ -32,6 +46,22 @@ export const registerStaff = createAsyncThunk(
   }
 );
 
+export const loginStaff = createAsyncThunk(
+  "staff/loginStaff",
+  async (loginData: IStaffLogin, { rejectWithValue }) => {
+    try {
+      const response = await staffService.loginStaff(loginData);
+      return response.data as IStaffLoginResponse;
+    } catch (error: any) {
+      const message =
+        error?.response?.data?.message ??
+        error?.message ??
+        "Login failed. Please check your credentials.";
+      return rejectWithValue(message);
+    }
+  }
+);
+
 const staffSlice = createSlice({
   name: "staff",
   initialState,
@@ -40,6 +70,27 @@ const staffSlice = createSlice({
     resetStaffState: (state) => {
       state.loading = false;
       state.error = null;
+    },
+    logoutStaff: (state) => {
+      state.authToken = null;
+      state.currentStaff = null;
+      localStorage.removeItem(STAFF_TOKEN_KEY);
+      localStorage.removeItem(STAFF_DATA_KEY);
+      sessionStorage.removeItem(STAFF_TOKEN_KEY);
+      sessionStorage.removeItem(STAFF_DATA_KEY);
+      sessionStorage.removeItem(STAFF_TEMP_TOKEN_KEY);
+    },
+    initializeStaffAuth: (state) => {
+      const token =
+        localStorage.getItem(STAFF_TOKEN_KEY) ||
+        sessionStorage.getItem(STAFF_TOKEN_KEY);
+      const staffData =
+        localStorage.getItem(STAFF_DATA_KEY) ||
+        sessionStorage.getItem(STAFF_DATA_KEY);
+      if (token && staffData) {
+        state.authToken = token;
+        state.currentStaff = JSON.parse(staffData);
+      }
     },
   },
 
@@ -60,8 +111,45 @@ const staffSlice = createSlice({
       state.loading = false;
       state.error = action.payload as string;
     });
+
+    builder
+      .addCase(loginStaff.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(loginStaff.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+
+        const payload = action.payload as IStaffLoginApiResponse;
+
+        if ("temporarySessionToken" in payload) {
+          state.authToken = null;
+          state.currentStaff = payload.staff ?? null;
+          sessionStorage.setItem(STAFF_TEMP_TOKEN_KEY, payload.temporarySessionToken);
+          if (payload.staff) {
+            sessionStorage.setItem(STAFF_DATA_KEY, JSON.stringify(payload.staff));
+          }
+          return;
+        }
+
+        state.authToken = payload.token;
+        state.currentStaff = payload.staff;
+
+        const storage = action.meta.arg.rememberMe
+          ? localStorage
+          : sessionStorage;
+        storage.setItem(STAFF_TOKEN_KEY, payload.token);
+        storage.setItem(STAFF_DATA_KEY, JSON.stringify(payload.staff));
+      })
+      .addCase(loginStaff.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+        state.authToken = null;
+        state.currentStaff = null;
+      });
   },
 });
 
-export const { resetStaffState } = staffSlice.actions;
+export const { resetStaffState, logoutStaff, initializeStaffAuth } = staffSlice.actions;
 export default staffSlice.reducer;

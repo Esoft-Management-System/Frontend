@@ -39,9 +39,16 @@ class APIRequest {
   private initializeRequestInterceptor() {
     this.axiosInstance.interceptors.request.use(
       (config) => {
-        const token = this.getCurrentToken();
-        if (token && config.headers) {
-          config.headers.Authorization = `Bearer ${token}`;
+        const hasAuthHeader = Boolean(
+          config.headers &&
+          (config.headers as Record<string, unknown>).Authorization
+        );
+
+        if (!hasAuthHeader) {
+          const token = this.getCurrentToken();
+          if (token && config.headers) {
+            config.headers.Authorization = `Bearer ${token}`;
+          }
         }
         return config;
       },
