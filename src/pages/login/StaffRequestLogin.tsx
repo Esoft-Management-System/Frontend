@@ -11,8 +11,8 @@ const StaffRequestLogin = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  // Get loading and error state from Redux
-  const { loading, error } = useAppSelector((state) => state.staff);
+  // Get loading state from Redux
+  const { loading } = useAppSelector((state) => state.staff);
 
   const currentDate = (() => {
     const today = new Date(); // save today date here
