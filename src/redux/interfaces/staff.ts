@@ -4,7 +4,7 @@ export interface IStaff {
   designation: string
   email: string
   reason: string
-  role: "staff"
+  role?: "staff" 
 }
 
 export interface IStaffState {
