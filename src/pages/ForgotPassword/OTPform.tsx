@@ -17,6 +17,7 @@ const OTPform = () => {
 	const emailFromState = (location.state as { email?: string } | null)?.email;
 	const emailFromOtpStorage = sessionStorage.getItem("otpEmail") || "";
 	const tempToken = sessionStorage.getItem("staffTemporaryToken") || "";
+	const forgotSessionToken = sessionStorage.getItem("forgotSessionToken") || (location.state as any)?.forgotSessionToken || "";
 	const storedStaff = useMemo(() => {
 		const raw = sessionStorage.getItem(STAFF_DATA_KEY) || localStorage.getItem(STAFF_DATA_KEY);
 		return raw ? JSON.parse(raw) : null;
@@ -36,11 +37,20 @@ const OTPform = () => {
 		|| "your email";
 
 	const sendOtp = async () => {
-		if (!tempToken || sending) return;
+		if (sending) return;
 		try {
 			setSending(true);
-			const res = await staffService.sendTempPasswordCode(tempToken);
-			toast.success((res as any)?.data?.message ?? "OTP sent");
+			if (forgotSessionToken) {
+				const res = await staffService.resendForgotPassword(forgotSessionToken);
+				toast.success((res as any)?.data?.message ?? "OTP sent");
+				return;
+			}
+			if (tempToken) {
+				const res = await staffService.sendTempPasswordCode(tempToken);
+				toast.success((res as any)?.data?.message ?? "OTP sent");
+				return;
+			}
+			toast.error("No session token available. Please start over.");
 		} catch (err: any) {
 			const message = err?.response?.data?.message ?? err?.message ?? "Failed to send code";
 			toast.error(message);
@@ -50,18 +60,36 @@ const OTPform = () => {
 	};
 
 	const handleVerify = async () => {
-		if (!tempToken || !isComplete || verifying) return;
+		if (!isComplete || verifying) return;
 		try {
 			setVerifying(true);
-			const res = await staffService.verifyTempPasswordCode(tempToken, otp);
-			const resetToken = (res as any)?.data?.resetToken as string | undefined;
-			if (resetToken) {
-				sessionStorage.setItem("staffResetToken", resetToken);
-				toast.success("Code verified. Please set a new password.");
-				navigate("/SetNewPassword");
-			} else {
-				toast.error("Missing reset token from server.");
+			if (forgotSessionToken) {
+				const res = await staffService.verifyForgotPassword(forgotSessionToken, otp);
+				const resetToken = (res as any)?.data?.resetToken as string | undefined;
+				if (resetToken) {
+					sessionStorage.setItem("forgotResetToken", resetToken);
+					toast.success("Code verified. Please set a new password.");
+					navigate("/SetNewPassword");
+				} else {
+					toast.error("Missing reset token from server.");
+				}
+				return;
 			}
+
+			if (tempToken) {
+				const res = await staffService.verifyTempPasswordCode(tempToken, otp);
+				const resetToken = (res as any)?.data?.resetToken as string | undefined;
+				if (resetToken) {
+					sessionStorage.setItem("staffResetToken", resetToken);
+					toast.success("Code verified. Please set a new password.");
+					navigate("/SetNewPassword");
+				} else {
+					toast.error("Missing reset token from server.");
+				}
+				return;
+			}
+
+			toast.error("No session token available. Please start over.");
 		} catch (err: any) {
 			const message = err?.response?.data?.message ?? err?.message ?? "Verification failed";
 			toast.error(message);

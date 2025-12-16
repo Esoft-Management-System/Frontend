@@ -79,7 +79,7 @@ const Login = () => {
   }
 
   const goToResetPassword = () => {
-    navigate("/forgotpassword");
+    navigate("/forgotpassword", { state: { role: "student" } });
   }
 
   const goToStudentRegister = () => {
