@@ -1,9 +1,52 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Textinput from "../../components/common/Textinput";
 import BlueButton from "../../components/common/BlueButton";
+import { staffService } from "../../services/staff.service";
+import { toast } from "react-toastify";
 
 const SetNewPassword = () => {
 	const navigate = useNavigate();
+	const [form, setForm] = useState({ newPassword: "", confirmNewPassword: "" });
+	const resetToken = sessionStorage.getItem("staffResetToken") || "";
+
+	useEffect(() => {
+		if (!resetToken) {
+			navigate("/OTPform");
+		}
+	}, [resetToken, navigate]);
+
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const { name, value } = e.target;
+		setForm((prev) => ({ ...prev, [name]: value }));
+	};
+
+	const handleSubmit = async () => {
+		if (!resetToken) {
+			toast.error("Missing reset token. Please verify code again.");
+			navigate("/OTPform");
+			return;
+		}
+		if (!form.newPassword.trim() || !form.confirmNewPassword.trim()) {
+			toast.error("Please fill both password fields.");
+			return;
+		}
+		if (form.newPassword !== form.confirmNewPassword) {
+			toast.error("Passwords do not match.");
+			return;
+		}
+		try {
+			await staffService.setTempPassword(resetToken, form.newPassword, form.confirmNewPassword);
+			toast.success("Password updated. Please log in.");
+			sessionStorage.removeItem("staffResetToken");
+			sessionStorage.removeItem("staffTemporaryToken");
+			sessionStorage.removeItem("otpEmail");
+			navigate("/");
+		} catch (err: any) {
+			const message = err?.response?.data?.message ?? err?.message ?? "Failed to set new password";
+			toast.error(message);
+		}
+	};
 	return (
 		<div className="min-h-screen w-full flex items-center justify-center bg-linear-to-br from-gray-50 to-gray-100 overflow-x-hidden">
 			<div className="flex w-full max-w-md flex-col p-6">
@@ -13,10 +56,24 @@ const SetNewPassword = () => {
 						<p className="text-sm text-gray-600">must be at least 6 characters</p>
 					</div>
 					<div className="flex flex-col w-full gap-4">
-						<Textinput labelText="New Password" placeholder="New Password" type="password" />
-						<Textinput labelText="Confirm Password" placeholder="Confirm Password" type="password" />
+						<Textinput
+							labelText="New Password"
+							placeholder="New Password"
+							type="password"
+							name="newPassword"
+							value={form.newPassword}
+							onChange={handleChange}
+						/>
+						<Textinput
+							labelText="Confirm Password"
+							placeholder="Confirm Password"
+							type="password"
+							name="confirmNewPassword"
+							value={form.confirmNewPassword}
+							onChange={handleChange}
+						/>
 					</div>
-					<BlueButton buttonName="Set Password" />
+					<BlueButton buttonName="Set Password" onClick={handleSubmit} />
 					<div className="flex flex-col items-center justify-center w-full">
 						<p className="text-gray-600 text-sm">Back to log in? <span onClick={() => navigate("/")} className="text-blue-600 hover:cursor-pointer font-semibold">Click here</span></p>
 					</div>

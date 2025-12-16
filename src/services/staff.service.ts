@@ -17,5 +17,20 @@ class StaffService extends APIRequest {
       temporarySessionToken: tempToken,
     });
   }
+
+  async verifyTempPasswordCode(tempToken: string, code: string) {
+    return this.post("/auth/temp-password/verify", {
+      temporarySessionToken: tempToken,
+      code,
+    });
+  }
+
+  async setTempPassword(resetToken: string, newPassword: string, confirmNewPassword: string) {
+    return this.post("/auth/temp-password/set", {
+      resetToken,
+      newPassword,
+      confirmNewPassword,
+    });
+  }
 }
 export const staffService = new StaffService();

@@ -12,6 +12,7 @@ const OTPform = () => {
 	const [otp, setOtp] = useState("");
 	const isComplete = otp.length === 6;
 	const [sending, setSending] = useState(false);
+	const [verifying, setVerifying] = useState(false);
 
 	const emailFromState = (location.state as { email?: string } | null)?.email;
 	const emailFromOtpStorage = sessionStorage.getItem("otpEmail") || "";
@@ -48,6 +49,27 @@ const OTPform = () => {
 		}
 	};
 
+	const handleVerify = async () => {
+		if (!tempToken || !isComplete || verifying) return;
+		try {
+			setVerifying(true);
+			const res = await staffService.verifyTempPasswordCode(tempToken, otp);
+			const resetToken = (res as any)?.data?.resetToken as string | undefined;
+			if (resetToken) {
+				sessionStorage.setItem("staffResetToken", resetToken);
+				toast.success("Code verified. Please set a new password.");
+				navigate("/SetNewPassword");
+			} else {
+				toast.error("Missing reset token from server.");
+			}
+		} catch (err: any) {
+			const message = err?.response?.data?.message ?? err?.message ?? "Verification failed";
+			toast.error(message);
+		} finally {
+			setVerifying(false);
+		}
+	};
+
 	useEffect(() => {
 		if (tempToken) {
 			sendOtp();
@@ -55,7 +77,7 @@ const OTPform = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [tempToken]);
 	return (
-		<div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 overflow-x-hidden">
+		<div className="min-h-screen w-full flex items-center justify-center bg-linear-to-br from-gray-50 to-gray-100 overflow-x-hidden">
 
 				<div className="flex w-full max-w-md p-6">
 
@@ -88,8 +110,9 @@ const OTPform = () => {
 							</button>
 
 							<BlueButton
-								onClick={() => navigate("/SetNewPassword")}
-								disabled={!isComplete}
+								onClick={handleVerify}
+								disabled={!isComplete || verifying}
+								loading={verifying}
 								buttonName="Verify"
 							/>
 
