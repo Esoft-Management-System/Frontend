@@ -11,8 +11,8 @@ const StaffRequestLogin = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  // Get loading and error state from Redux
-  const { loading, error } = useAppSelector((state) => state.staff);
+  // Get loading state from Redux
+  const { loading } = useAppSelector((state) => state.staff);
 
   const currentDate = (() => {
     const today = new Date(); // save today date here
@@ -130,7 +130,11 @@ const StaffRequestLogin = () => {
         reason: "",
       });
     } catch (err) {
-      toast.error(error || "Failed to submit request");
+      const message =
+        typeof err === "string"
+          ? err
+          : (err as any)?.message ?? "Failed to submit request";
+      toast.error(message);
       console.error("Failed to submit request:", err);
     }
   }
