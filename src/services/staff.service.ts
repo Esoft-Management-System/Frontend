@@ -32,5 +32,33 @@ class StaffService extends APIRequest {
       confirmNewPassword,
     });
   }
+
+  async requestForgotPassword(email: string, role: string) {
+    return this.post("/auth/forgot-password/request", {
+      email,
+      role,
+    });
+  }
+
+  async verifyForgotPassword(forgotSessionToken: string, verificationCode: string) {
+    return this.post("/auth/forgot-password/verify", {
+      forgotSessionToken,
+      verificationCode,
+    });
+  }
+
+  async resendForgotPassword(forgotSessionToken: string) {
+    return this.post("/auth/forgot-password/resend", {
+      forgotSessionToken,
+    });
+  }
+
+  async resetForgotPassword(resetToken: string, newPassword: string, confirmNewPassword: string) {
+    return this.post("/auth/forgot-password/reset", {
+      resetToken,
+      newPassword,
+      confirmNewPassword,
+    });
+  }
 }
 export const staffService = new StaffService();

@@ -8,13 +8,15 @@ import { toast } from "react-toastify";
 const SetNewPassword = () => {
 	const navigate = useNavigate();
 	const [form, setForm] = useState({ newPassword: "", confirmNewPassword: "" });
-	const resetToken = sessionStorage.getItem("staffResetToken") || "";
+	const staffResetToken = sessionStorage.getItem("staffResetToken") || "";
+	const forgotResetToken = sessionStorage.getItem("forgotResetToken") || "";
+	const forgotRole = sessionStorage.getItem("forgotRole") || "student";
 
 	useEffect(() => {
-		if (!resetToken) {
+		if (!staffResetToken && !forgotResetToken) {
 			navigate("/OTPform");
 		}
-	}, [resetToken, navigate]);
+	}, [staffResetToken, forgotResetToken, navigate]);
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
@@ -22,7 +24,7 @@ const SetNewPassword = () => {
 	};
 
 	const handleSubmit = async () => {
-		if (!resetToken) {
+		if (!staffResetToken && !forgotResetToken) {
 			toast.error("Missing reset token. Please verify code again.");
 			navigate("/OTPform");
 			return;
@@ -36,7 +38,18 @@ const SetNewPassword = () => {
 			return;
 		}
 		try {
-			await staffService.setTempPassword(resetToken, form.newPassword, form.confirmNewPassword);
+			if (forgotResetToken) {
+				await staffService.resetForgotPassword(forgotResetToken, form.newPassword, form.confirmNewPassword);
+				toast.success("Password reset successfully.");
+				sessionStorage.removeItem("forgotResetToken");
+				sessionStorage.removeItem("forgotSessionToken");
+				sessionStorage.removeItem("forgotRole");
+				sessionStorage.removeItem("otpEmail");
+				navigate(forgotRole === "staff" ? "/staff" : "/");
+				return;
+			}
+
+			await staffService.setTempPassword(staffResetToken, form.newPassword, form.confirmNewPassword);
 			toast.success("Password updated. Please log in.");
 			sessionStorage.removeItem("staffResetToken");
 			sessionStorage.removeItem("staffTemporaryToken");

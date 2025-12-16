@@ -98,7 +98,7 @@ const StaffLogin = () => {
     }
   };
 
-  const goToResetPassword = () => navigate("/forgotpassword");
+  const goToResetPassword = () => navigate("/forgotpassword", { state: { role: "staff" } });
   const goToStudent = () => {
     setIsStaff(false);
     navigate("/");
