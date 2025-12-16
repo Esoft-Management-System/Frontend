@@ -25,7 +25,7 @@ const StaffRequestLogin = () => {
   //set form data to get the values from the input fields and set it into interfaces
   const [formData, setFormData] = useState<IStaff>({
     staffId: "",
-    fullName: "",
+    fullname: "",
     designation: "",
     email: "",
     reason: "",
@@ -35,7 +35,7 @@ const StaffRequestLogin = () => {
   //this is for form validation ragavi, such as if i missed one field it will show an error message
   const [errors, setErrors] = useState<IStaff>({
     staffId: "",
-    fullName: "",
+    fullname: "",
     designation: "",
     email: "",
     reason: "",
@@ -63,7 +63,7 @@ const StaffRequestLogin = () => {
   const validateForm = (): boolean => {
     const newErrors = {
       staffId: "",
-      fullName: "",
+      fullname: "",
       designation: "",
       email: "",
       reason: "",
@@ -76,8 +76,8 @@ const StaffRequestLogin = () => {
       isValid = false;
     }
 
-    if (!formData.fullName.trim()) {
-      newErrors.fullName = "Staff Name is required";
+    if (!formData.fullname.trim()) {
+      newErrors.fullname = "Staff Name is required";
       isValid = false;
     }
 
@@ -111,10 +111,14 @@ const StaffRequestLogin = () => {
     }
 
     //load the data for submission
-    const staffData: IStaff = {
-      ...formData,
+    const staffData = {
+      staffId: formData.staffId,
+      fullName: formData.fullname, // API expects fullName (camel-cased N)
+      designation: formData.designation,
+      email: formData.email,
+      reason: formData.reason,
       role: "staff",
-    }
+    } as any;
 
     try {
       const result = await dispatch(registerStaff(staffData)).unwrap();
@@ -124,10 +128,11 @@ const StaffRequestLogin = () => {
 
       setFormData({
         staffId: "",
-        fullName: "",
+        fullname: "",
         designation: "",
         email: "",
         reason: "",
+        role: "staff",
       });
     } catch (err) {
       const message =
@@ -168,10 +173,10 @@ const StaffRequestLogin = () => {
                 labelText="Staff Name"
                 placeholder="Staff Name"
                 type="text"
-                name="fullName"
-                value={formData.fullName}
+                name="fullname"
+                value={formData.fullname}
                 onChange={handleChange}
-                error={errors.fullName}
+                error={errors.fullname}
               />
             </div>
             <div className="flex w-full gap-3 flex-col md:flex-row">
