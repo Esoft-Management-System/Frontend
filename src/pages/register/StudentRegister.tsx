@@ -27,6 +27,7 @@ const StudentRegister = () => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    // Clear any existing error messages
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {

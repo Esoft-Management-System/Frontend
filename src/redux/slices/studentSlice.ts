@@ -12,14 +12,22 @@ const initialState: IStudentState = {
 //Async thunk: Register new student
 export const registerStudent = createAsyncThunk(
   "students/registerStudent",
-  async (studentData: IStudent, { rejectWithValue }) => {
+  async (studentData: IStudent, { rejectWithValue, getState }) => {
+    const state = getState() as { student: IStudentState };
+    const existingStudent = state.student.data.find(
+      (student) => student.emailAddress === studentData.emailAddress
+    );
+    if (existingStudent) {
+      return rejectWithValue("Email already exists");
+    }
     try {
       const response = await studentService.registerStudent(studentData);
       return response.data;
     } catch (error: any) {
       const message =
         error?.response?.data?.message ??
-        error?.message ??error?.response?.data?.message ??
+        error?.message ??
+        error?.response?.data?.message ??
         error?.message ??
         "Student registration failed";
       return rejectWithValue(message);

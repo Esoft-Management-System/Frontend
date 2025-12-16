@@ -130,7 +130,11 @@ const StaffRequestLogin = () => {
         reason: "",
       });
     } catch (err) {
-      toast.error(error || "Failed to submit request");
+      const message =
+        typeof err === "string"
+          ? err
+          : (err as any)?.message ?? "Failed to submit request";
+      toast.error(message);
       console.error("Failed to submit request:", err);
     }
   }

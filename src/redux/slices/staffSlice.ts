@@ -8,9 +8,17 @@ const initialState: IStaffState = {
   error: null,
 };
 
+// Async thunk: Register new staff
 export const registerStaff = createAsyncThunk(
   "staff/requestStaff",
-  async (staffData: IStaff, { rejectWithValue }) => {
+  async (staffData: IStaff, { rejectWithValue, getState }) => {
+    const state = getState() as { staff: IStaffState };
+    const existingStaff = state.staff.data.find(
+      (staff) => staff.staffId === staffData.staffId
+    );
+    if (existingStaff) {
+      return rejectWithValue("Staff ID already exists");
+    }
     try {
       const response = await staffService.requestsStaff(staffData);
       return response.data;
@@ -19,7 +27,7 @@ export const registerStaff = createAsyncThunk(
         error?.response?.data?.message ??
         error?.message ??
         "Staff request failed";
-        return rejectWithValue(message);
+      return rejectWithValue(message);
     }
   }
 );
