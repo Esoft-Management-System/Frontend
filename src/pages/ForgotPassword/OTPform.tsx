@@ -8,7 +8,7 @@ const OTPform = () => {
 	const [otp, setOtp] = useState("");
 	const isComplete = otp.length === 6;
 	return (
-		<div className="min-h-screen w-full flex items-center justify-center from-gray-50 to-gray-100 overflow-x-hidden bg-[#EFEFEF]">
+		<div className="min-h-screen w-full flex items-center justify-center bg-linear-to-br from-gray-50 to-gray-100 overflow-x-hidden">
 
 				<div className="flex w-full max-w-md p-6">
 
