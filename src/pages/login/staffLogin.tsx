@@ -44,7 +44,7 @@ const StaffLogin = () => {
 	}
 
 	return (
-		<div className="min-h-screen w-full flex items-center justify-center from-gray-50 to-gray-100 overflow-x-hidden">
+		<div className="min-h-screen w-full flex items-center justify-center bg-linear-to-brrom-gray-50 to-gray-100 overflow-x-hidden">
 			<div className="flex w-full max-w-md flex-col p-6">
 				<div className="bg-white flex-1 flex flex-col gap-6 p-8 rounded-2xl shadow-lg border border-gray-100">
 					{/* Header Section */}

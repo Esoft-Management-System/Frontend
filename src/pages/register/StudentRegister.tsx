@@ -82,7 +82,7 @@ const StudentRegister = () => {
   const goToLogin = () => navigate("/");
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center from-gray-50 to-gray-100 overflow-x-hidden bg-[#EFEFEF]">
+    <div className="min-h-screen w-full flex items-center justify-center bg-linear-to-br from-gray-50 to-gray-100 overflow-x-hidden">
       <div className="flex w-full max-w-[600px] flex-col p-6">
         <form
           onSubmit={handleSubmit}
