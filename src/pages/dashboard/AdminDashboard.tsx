@@ -19,7 +19,10 @@ import {
   Mail,
   Briefcase,
   User,
-  Loader2
+  Loader2,
+  Calendar,
+  GraduationCap,
+  Book
 } from "lucide-react";
 
 interface StaffRequestRow {
@@ -303,19 +306,19 @@ const AdminDashboard = () => {
               <div className="space-y-2">
                 <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg bg-blue-50 text-blue-700 font-medium border border-blue-100 hover:bg-blue-100 transition-colors">
                   <Users className="h-4 w-4" />
-                  Staff Management
+                  Staff Request
                 </button>
                 <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-700 font-medium hover:bg-slate-50 transition-colors">
-                  <UserCheck className="h-4 w-4" />
-                  Approvals
+                  <Calendar className="h-4 w-4" />
+                  Attendance
                 </button>
                 <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-700 font-medium hover:bg-slate-50 transition-colors">
-                  <Key className="h-4 w-4" />
-                  Security
+                  <GraduationCap className="h-4 w-4" />
+                  Student
                 </button>
                 <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-700 font-medium hover:bg-slate-50 transition-colors">
-                  <Briefcase className="h-4 w-4" />
-                  Departments
+                  <Book className="h-4 w-4" />
+                  Batches
                 </button>
               </div>
             </div>

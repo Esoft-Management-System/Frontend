@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Textinput from "../../components/common/Textinput";
 import BlueButton from "../../components/common/BlueButton";
@@ -8,16 +8,21 @@ import { toast } from "react-toastify";
 const SetNewPassword = () => {
 	const navigate = useNavigate();
 	const [form, setForm] = useState({ newPassword: "", confirmNewPassword: "" });
-	const staffResetToken = sessionStorage.getItem("staffResetToken") || "";
-	const forgotResetToken = sessionStorage.getItem("forgotResetToken") || "";
-	const forgotRole = sessionStorage.getItem("forgotRole") || "student";
+	const { staffResetToken, forgotResetToken, forgotRole } = useMemo(
+		() => ({
+			staffResetToken: sessionStorage.getItem("staffResetToken") || "",
+			forgotResetToken: sessionStorage.getItem("forgotResetToken") || "",
+			forgotRole: sessionStorage.getItem("forgotRole") || "student"
+		}),
+		[]
+	);
 	const [submitting, setSubmitting] = useState(false);
 
 	useEffect(() => {
 		if (!staffResetToken && !forgotResetToken) {
 			navigate("/OTPform");
 		}
-	}, [staffResetToken, forgotResetToken, navigate]);
+	}, [navigate, staffResetToken, forgotResetToken]);
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
