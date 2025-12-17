@@ -18,7 +18,7 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({
 }) => {
   return (
     <div className="min-h-screen bg-linear-to-b from-slate-50 to-slate-100">
-      <div className="max-w-5xl mx-auto px-4 py-10">
+      <div className="max-w-full mx-auto px-4 py-10">
         <header className="flex items-center justify-between bg-white border border-slate-200 rounded-xl px-5 py-4 shadow-sm">
           <div>
             <p className="text-xs font-semibold uppercase tracking-wide text-blue-600">{role}</p>

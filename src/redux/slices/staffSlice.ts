@@ -8,9 +8,10 @@ import type {
   IStaffLoginApiResponse,
   IStaffLoginResponse,
   IStaffState,
+  IAdminSummaryResponse,
 } from "../interfaces/staff";
 import { staffService } from "../../services/staff.service";
-import { STAFF_DATA_KEY, STAFF_TOKEN_KEY } from "../../services/api-request";
+import { ADMIN_TOKEN_KEY, STAFF_DATA_KEY, STAFF_TOKEN_KEY } from "../../services/api-request";
 
 const STAFF_TEMP_TOKEN_KEY = "staffTemporaryToken";
 
@@ -20,6 +21,9 @@ const initialState: IStaffState = {
   error: null,
   authToken: null,
   currentStaff: null,
+  adminSummary: undefined,
+  adminSummaryLoading: false,
+  adminSummaryError: null,
 };
 
 // Async thunk: Register new staff
@@ -62,6 +66,22 @@ export const loginStaff = createAsyncThunk(
   }
 );
 
+export const fetchAdminSummary = createAsyncThunk(
+  "staff/fetchAdminSummary",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await staffService.getAdminSummary();
+      return response.data as IAdminSummaryResponse;
+    } catch (error: any) {
+      const message =
+        error?.response?.data?.message ??
+        error?.message ??
+        "Failed to load admin summary";
+      return rejectWithValue(message);
+    }
+  }
+);
+
 const staffSlice = createSlice({
   name: "staff",
   initialState,
@@ -75,13 +95,17 @@ const staffSlice = createSlice({
       state.authToken = null;
       state.currentStaff = null;
       localStorage.removeItem(STAFF_TOKEN_KEY);
+      localStorage.removeItem(ADMIN_TOKEN_KEY);
       localStorage.removeItem(STAFF_DATA_KEY);
       sessionStorage.removeItem(STAFF_TOKEN_KEY);
+      sessionStorage.removeItem(ADMIN_TOKEN_KEY);
       sessionStorage.removeItem(STAFF_DATA_KEY);
       sessionStorage.removeItem(STAFF_TEMP_TOKEN_KEY);
     },
     initializeStaffAuth: (state) => {
       const token =
+        localStorage.getItem(ADMIN_TOKEN_KEY) ||
+        sessionStorage.getItem(ADMIN_TOKEN_KEY) ||
         localStorage.getItem(STAFF_TOKEN_KEY) ||
         sessionStorage.getItem(STAFF_TOKEN_KEY);
       const staffData =
@@ -139,7 +163,11 @@ const staffSlice = createSlice({
         const storage = action.meta.arg.rememberMe
           ? localStorage
           : sessionStorage;
-        storage.setItem(STAFF_TOKEN_KEY, payload.token);
+        if (payload.tokenType === "adminToken") {
+          storage.setItem(ADMIN_TOKEN_KEY, payload.token);
+        } else {
+          storage.setItem(STAFF_TOKEN_KEY, payload.token);
+        }
         storage.setItem(STAFF_DATA_KEY, JSON.stringify(payload.staff));
       })
       .addCase(loginStaff.rejected, (state, action) => {
@@ -147,6 +175,20 @@ const staffSlice = createSlice({
         state.error = action.payload as string;
         state.authToken = null;
         state.currentStaff = null;
+      });
+
+    builder
+      .addCase(fetchAdminSummary.pending, (state) => {
+        state.adminSummaryLoading = true;
+        state.adminSummaryError = null;
+      })
+      .addCase(fetchAdminSummary.fulfilled, (state, action) => {
+        state.adminSummaryLoading = false;
+        state.adminSummary = action.payload as IAdminSummaryResponse;
+      })
+      .addCase(fetchAdminSummary.rejected, (state, action) => {
+        state.adminSummaryLoading = false;
+        state.adminSummaryError = action.payload as string;
       });
   },
 });

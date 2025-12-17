@@ -11,6 +11,7 @@ const SetNewPassword = () => {
 	const staffResetToken = sessionStorage.getItem("staffResetToken") || "";
 	const forgotResetToken = sessionStorage.getItem("forgotResetToken") || "";
 	const forgotRole = sessionStorage.getItem("forgotRole") || "student";
+	const [submitting, setSubmitting] = useState(false);
 
 	useEffect(() => {
 		if (!staffResetToken && !forgotResetToken) {
@@ -38,6 +39,7 @@ const SetNewPassword = () => {
 			return;
 		}
 		try {
+			setSubmitting(true);
 			if (forgotResetToken) {
 				await staffService.resetForgotPassword(forgotResetToken, form.newPassword, form.confirmNewPassword);
 				toast.success("Password reset successfully.");
@@ -58,6 +60,8 @@ const SetNewPassword = () => {
 		} catch (err: any) {
 			const message = err?.response?.data?.message ?? err?.message ?? "Failed to set new password";
 			toast.error(message);
+		} finally {
+			setSubmitting(false);
 		}
 	};
 	return (
@@ -86,7 +90,7 @@ const SetNewPassword = () => {
 							onChange={handleChange}
 						/>
 					</div>
-					<BlueButton buttonName="Set Password" onClick={handleSubmit} />
+					<BlueButton buttonName="Set Password" onClick={handleSubmit} loading={submitting} disabled={submitting} />
 					<div className="flex flex-col items-center justify-center w-full">
 						<p className="text-gray-600 text-sm">Back to log in? <span onClick={() => navigate("/")} className="text-blue-600 hover:cursor-pointer font-semibold">Click here</span></p>
 					</div>
