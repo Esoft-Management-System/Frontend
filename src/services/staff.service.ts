@@ -60,5 +60,21 @@ class StaffService extends APIRequest {
       confirmNewPassword,
     });
   }
+
+  async getAdminSummary() {
+    return this.get("/staff-requests/admin/summary");
+  }
+
+  async approveStaffRequest(id: string) {
+    return this.patch(`/staff-requests/${id}/approve`);
+  }
+
+  async reapproveStaffRequest(id: string) {
+    return this.patch(`/staff-requests/${id}/reapprove`);
+  }
+
+  async rejectStaffRequest(id: string) {
+    return this.patch(`/staff-requests/${id}/reject`);
+  }
 }
 export const staffService = new StaffService();

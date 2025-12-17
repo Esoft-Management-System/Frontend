@@ -11,6 +11,7 @@ export interface IResponse<T = any> {
 export const TOKEN_KEY = "token";
 export const STUDENT_TOKEN_KEY = "studentToken";
 export const STAFF_TOKEN_KEY = "staffToken";
+export const ADMIN_TOKEN_KEY = "adminToken";
 
 // Token type for better type safety (erasable)
 export type TokenType = "studentToken" | "staffToken" | "adminToken";
@@ -82,27 +83,31 @@ class APIRequest {
 
   // Helper method to get current token
   private getCurrentToken(): string | null {
-    // Priority: Student token > Staff token > General token
-    const studentToken =
-      localStorage.getItem(STUDENT_TOKEN_KEY) ||
-      sessionStorage.getItem(STUDENT_TOKEN_KEY);
+    // Priority: admin > staff > student > general
+    const adminToken =
+      localStorage.getItem(ADMIN_TOKEN_KEY) ||
+      sessionStorage.getItem(ADMIN_TOKEN_KEY);
 
     const staffToken =
       localStorage.getItem(STAFF_TOKEN_KEY) ||
       sessionStorage.getItem(STAFF_TOKEN_KEY);
 
-    return studentToken || staffToken || localStorage.getItem(TOKEN_KEY);
+    const studentToken =
+      localStorage.getItem(STUDENT_TOKEN_KEY) ||
+      sessionStorage.getItem(STUDENT_TOKEN_KEY);
+
+    return adminToken || staffToken || studentToken || localStorage.getItem(TOKEN_KEY);
   }
 
   // Helper method to clear all authentication tokens
   private clearAllTokens(): void {
     // Clear localStorage
-    [TOKEN_KEY, STUDENT_TOKEN_KEY, STAFF_TOKEN_KEY].forEach((key) => {
+    [TOKEN_KEY, STUDENT_TOKEN_KEY, STAFF_TOKEN_KEY, ADMIN_TOKEN_KEY].forEach((key) => {
       localStorage.removeItem(key);
     });
 
     // Clear sessionStorage
-    [STUDENT_TOKEN_KEY, STAFF_TOKEN_KEY].forEach((key) => {
+    [STUDENT_TOKEN_KEY, STAFF_TOKEN_KEY, ADMIN_TOKEN_KEY].forEach((key) => {
       sessionStorage.removeItem(key);
     });
   }
@@ -126,6 +131,12 @@ class APIRequest {
 
   // Public method to get current user type
   public getCurrentUserType(): TokenType | null {
+    if (
+      localStorage.getItem(ADMIN_TOKEN_KEY) ||
+      sessionStorage.getItem(ADMIN_TOKEN_KEY)
+    ) {
+      return "adminToken";
+    }
     if (
       localStorage.getItem(STUDENT_TOKEN_KEY) ||
       sessionStorage.getItem(STUDENT_TOKEN_KEY)

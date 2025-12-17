@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Textinput from "../../components/common/Textinput";
 import BlueButton from "../../components/common/BlueButton";
@@ -8,15 +8,21 @@ import { toast } from "react-toastify";
 const SetNewPassword = () => {
 	const navigate = useNavigate();
 	const [form, setForm] = useState({ newPassword: "", confirmNewPassword: "" });
-	const staffResetToken = sessionStorage.getItem("staffResetToken") || "";
-	const forgotResetToken = sessionStorage.getItem("forgotResetToken") || "";
-	const forgotRole = sessionStorage.getItem("forgotRole") || "student";
+	const { staffResetToken, forgotResetToken, forgotRole } = useMemo(
+		() => ({
+			staffResetToken: sessionStorage.getItem("staffResetToken") || "",
+			forgotResetToken: sessionStorage.getItem("forgotResetToken") || "",
+			forgotRole: sessionStorage.getItem("forgotRole") || "student"
+		}),
+		[]
+	);
+	const [submitting, setSubmitting] = useState(false);
 
 	useEffect(() => {
 		if (!staffResetToken && !forgotResetToken) {
 			navigate("/OTPform");
 		}
-	}, [staffResetToken, forgotResetToken, navigate]);
+	}, [navigate, staffResetToken, forgotResetToken]);
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
@@ -38,6 +44,7 @@ const SetNewPassword = () => {
 			return;
 		}
 		try {
+			setSubmitting(true);
 			if (forgotResetToken) {
 				await staffService.resetForgotPassword(forgotResetToken, form.newPassword, form.confirmNewPassword);
 				toast.success("Password reset successfully.");
@@ -58,6 +65,8 @@ const SetNewPassword = () => {
 		} catch (err: any) {
 			const message = err?.response?.data?.message ?? err?.message ?? "Failed to set new password";
 			toast.error(message);
+		} finally {
+			setSubmitting(false);
 		}
 	};
 	return (
@@ -86,7 +95,7 @@ const SetNewPassword = () => {
 							onChange={handleChange}
 						/>
 					</div>
-					<BlueButton buttonName="Set Password" onClick={handleSubmit} />
+					<BlueButton buttonName="Set Password" onClick={handleSubmit} loading={submitting} disabled={submitting} />
 					<div className="flex flex-col items-center justify-center w-full">
 						<p className="text-gray-600 text-sm">Back to log in? <span onClick={() => navigate("/")} className="text-blue-600 hover:cursor-pointer font-semibold">Click here</span></p>
 					</div>
