@@ -1,5 +1,6 @@
 import { Upload } from "lucide-react";
 import { useState } from "react";
+import * as XLSX from "xlsx";
 
 interface AttendanceRecord {
   rollNo: string;
@@ -10,145 +11,144 @@ interface AttendanceRecord {
 
 interface AttendanceTableProps {
   batchName: string;
-  data?: AttendanceRecord[];
 }
 
-const AttendanceTable = ({ batchName, data = [] }: AttendanceTableProps) => {
-  const [attendanceData, setAttendanceData] = useState<AttendanceRecord[]>(data);
+const AttendanceTable = ({ batchName }: AttendanceTableProps) => {
+  const [attendanceData, setAttendanceData] = useState<AttendanceRecord[]>([]);
   const [fileName, setFileName] = useState<string>("");
 
-  const handleExcelUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  // SAFE STATUS PARSER (FIXES TS ERROR)
+  const parseStatus = (value: any): "present" | "absent" | "leave" => {
+    const status = String(value).toLowerCase().trim();
+    if (status === "present") return "present";
+    if (status === "leave") return "leave";
+    return "absent";
+  };
+
+  // FILE UPLOAD HANDLER
+  const handleUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
     setFileName(file.name);
 
-    // Parse Excel file using FileReader
     const reader = new FileReader();
     reader.onload = (e) => {
-      try {
-        const content = e.target?.result as string;
-        const lines = content.split("\n");
-        const newData: AttendanceRecord[] = [];
+      const data = e.target?.result;
+      if (!data) return;
 
-        // Skip header row and parse data
-        for (let i = 1; i < lines.length; i++) {
-          const line = lines[i].trim();
-          if (!line) continue;
+      const workbook = XLSX.read(data, { type: "binary" });
+      const sheet = workbook.Sheets[workbook.SheetNames[0]];
+      const json = XLSX.utils.sheet_to_json<any>(sheet);
 
-          const columns = line.split(",");
-          if (columns.length >= 4) {
-            newData.push({
-              rollNo: columns[0]?.trim() || "",
-              studentName: columns[1]?.trim() || "",
-              date: columns[2]?.trim() || "",
-              status: (columns[3]?.trim().toLowerCase() || "absent") as "present" | "absent" | "leave",
-            });
-          }
-        }
+      const formatted: AttendanceRecord[] = json
+        .filter((row) => row["Roll No"] || row["rollNo"]) // remove empty rows
+        .map((row) => ({
+          rollNo: String(row["Roll No"] || row["rollNo"] || "").trim(),
+          studentName: String(
+            row["Student Name"] || row["studentName"] || ""
+          ).trim(),
+          date: String(row["Date"] || "").trim(),
+          status: parseStatus(row["Status"]),
+        }));
 
-        setAttendanceData(newData);
-      } catch (error) {
-        console.error("Error parsing file:", error);
-      }
+      setAttendanceData(formatted);
     };
-    reader.readAsText(file);
+
+    reader.readAsBinaryString(file);
   };
 
-  const getStatusBadgeColor = (status: string) => {
+  // ✅ COUNT HELPER
+  const count = (status: "present" | "absent" | "leave") =>
+    attendanceData.filter((r) => r.status === status).length;
+
+  // ✅ STATUS BADGE STYLE
+  const badgeStyle = (status: string) => {
     switch (status) {
       case "present":
-        return "bg-green-100 text-green-800";
+        return "bg-green-100 text-green-700";
       case "absent":
-        return "bg-red-100 text-red-800";
+        return "bg-red-100 text-red-700";
       case "leave":
-        return "bg-yellow-100 text-yellow-800";
+        return "bg-yellow-100 text-yellow-700";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-gray-100 text-gray-700";
     }
   };
 
   return (
-    <div className="w-full bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-      <div className="mb-6">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">
-          {batchName} - Attendance
-        </h2>
+    <div className="bg-white rounded-xl border p-6">
+      <h2 className="text-lg font-semibold mb-4">
+        {batchName} - Attendance
+      </h2>
 
-        {/* Upload Section */}
-        <div className="mb-6">
-          <label className="flex items-center justify-center w-full px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors bg-gray-50 hover:bg-blue-50">
-            <div className="flex items-center gap-3">
-              <Upload size={20} className="text-gray-600" />
-              <span className="text-sm text-gray-700 font-medium">
-                {fileName ? `Loaded: ${fileName}` : "Upload Excel File (.csv)"}
-              </span>
-            </div>
-            <input
-              type="file"
-              accept=".csv,.xlsx,.xls"
-              onChange={handleExcelUpload}
-              className="hidden"
-            />
-          </label>
-        </div>
+      {/* Upload */}
+      <label className="flex items-center justify-center gap-2 border-2 border-dashed rounded-lg py-3 text-sm cursor-pointer bg-gray-50">
+        <Upload size={18} />
+        <span>
+          {fileName ? `Loaded: ${fileName}` : "Upload Excel / CSV file"}
+        </span>
+        <input
+          type="file"
+          accept=".xlsx,.xls,.csv"
+          onChange={handleUpload}
+          className="hidden"
+        />
+      </label>
 
-        {/* Stats Section */}
-        {attendanceData.length > 0 && (
-          <div className="grid grid-cols-3 gap-4 mb-6">
-            <div className="bg-green-50 rounded-lg p-4">
-              <p className="text-sm text-gray-600 font-medium">Present</p>
-              <p className="text-2xl font-bold text-green-600">
-                {attendanceData.filter((r) => r.status === "present").length}
-              </p>
-            </div>
-            <div className="bg-red-50 rounded-lg p-4">
-              <p className="text-sm text-gray-600 font-medium">Absent</p>
-              <p className="text-2xl font-bold text-red-600">
-                {attendanceData.filter((r) => r.status === "absent").length}
-              </p>
-            </div>
-            <div className="bg-yellow-50 rounded-lg p-4">
-              <p className="text-sm text-gray-600 font-medium">Leave</p>
-              <p className="text-2xl font-bold text-yellow-600">
-                {attendanceData.filter((r) => r.status === "leave").length}
-              </p>
-            </div>
+      {/* Stats */}
+      {attendanceData.length > 0 && (
+        <div className="grid grid-cols-3 gap-4 my-6">
+          <div className="bg-green-50 rounded-lg p-4">
+            <p className="text-sm">Present</p>
+            <p className="text-2xl font-bold text-green-600">
+              {count("present")}
+            </p>
           </div>
-        )}
-      </div>
+
+          <div className="bg-red-50 rounded-lg p-4">
+            <p className="text-sm">Absent</p>
+            <p className="text-2xl font-bold text-red-600">
+              {count("absent")}
+            </p>
+          </div>
+
+          <div className="bg-yellow-50 rounded-lg p-4">
+            <p className="text-sm">Leave</p>
+            <p className="text-2xl font-bold text-yellow-600">
+              {count("leave")}
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Table */}
       {attendanceData.length > 0 ? (
         <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b border-gray-200 bg-gray-50">
-                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
-                  Roll No
-                </th>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
-                  Student Name
-                </th>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
-                  Date
-                </th>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
-                  Status
-                </th>
+          <table className="w-full text-sm">
+            <thead className="border-b text-gray-500">
+              <tr>
+                <th className="text-left py-3">Roll No</th>
+                <th className="text-left py-3">Student Name</th>
+                <th className="text-left py-3">Date</th>
+                <th className="text-left py-3">Status</th>
               </tr>
             </thead>
+
             <tbody>
-              {attendanceData.map((record, index) => (
-                <tr key={index} className="border-b border-gray-100 hover:bg-gray-50 transition">
-                  <td className="px-6 py-4 text-sm text-gray-900">{record.rollNo}</td>
-                  <td className="px-6 py-4 text-sm text-gray-900">{record.studentName}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{record.date}</td>
-                  <td className="px-6 py-4 text-sm">
+              {attendanceData.map((r, i) => (
+                <tr key={i} className="border-b last:border-none">
+                  <td className="py-3">{r.rollNo}</td>
+                  <td className="py-3">{r.studentName}</td>
+                  <td className="py-3">{r.date}</td>
+                  <td className="py-3">
                     <span
-                      className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${getStatusBadgeColor(record.status)}`}
+                      className={`px-3 py-1 rounded-full text-xs font-medium ${badgeStyle(
+                        r.status
+                      )}`}
                     >
-                      {record.status.charAt(0).toUpperCase() + record.status.slice(1)}
+                      {r.status.charAt(0).toUpperCase() +
+                        r.status.slice(1)}
                     </span>
                   </td>
                 </tr>
@@ -157,11 +157,9 @@ const AttendanceTable = ({ batchName, data = [] }: AttendanceTableProps) => {
           </table>
         </div>
       ) : (
-        <div className="text-center py-12">
-          <p className="text-gray-500 text-sm">
-            Upload an Excel file to display attendance records
-          </p>
-        </div>
+        <p className="text-center text-gray-400 mt-6">
+          Upload an Excel / CSV file to view attendance
+        </p>
       )}
     </div>
   );
