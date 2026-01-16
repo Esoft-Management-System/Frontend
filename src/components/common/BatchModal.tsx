@@ -5,17 +5,15 @@ interface BatchModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (batchName: string) => void;
-  onDelete: (batchName: string) => void;
-  batches?: string[];
 }
 
 const BatchModal = ({
   isOpen,
   onClose,
   onSubmit,
-  batches = [],
 }: BatchModalProps) => {
   const [batchName, setBatchName] = useState("");
+
   const [error, setError] = useState("");
 
   const handleSubmit = () => {
@@ -26,8 +24,10 @@ const BatchModal = ({
       return;
     }
 
+
     onSubmit(batchName.trim());
     setBatchName("");
+   
     onClose();
   };
 
@@ -62,7 +62,7 @@ const BatchModal = ({
           <div className="p-6 space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-900 mb-2">
-                Add New Batch
+                Batch Name
               </label>
               <input
                 type="text"
@@ -73,6 +73,7 @@ const BatchModal = ({
                            focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
+
 
             {/* ERROR */}
             {error && (

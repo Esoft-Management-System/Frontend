@@ -3,11 +3,11 @@ import { Trash2 } from "lucide-react";
 
 interface BatchCardProps {
   batchName: string;
-  studentCount: number;
   isSelected?: boolean;
+  onClick: () => void;
 }
 
-const BatchCard = ({ batchName,  isSelected = false }: BatchCardProps) => {
+const BatchCard = ({ batchName,  isSelected = false, onClick }: BatchCardProps) => {
 
   // store batch inside card
   const [isDeleted, setIsDeleted] = useState(false);
@@ -26,6 +26,7 @@ const BatchCard = ({ batchName,  isSelected = false }: BatchCardProps) => {
       className={`relative p-6 rounded-xl border-2 cursor-pointer transition-all duration-200 group
         ${isSelected ? "border-blue-600 bg-blue-50 shadow-md"
                      : "border-gray-200 bg-white hover:border-gray-300 hover:shadow-sm"}`}
+      onClick={onClick}
     >
       <div className="flex items-start justify-between">
         <h3 className="text-lg font-semibold text-gray-900">
@@ -34,6 +35,8 @@ const BatchCard = ({ batchName,  isSelected = false }: BatchCardProps) => {
 
         {isSelected && <div className="w-3 h-3 bg-blue-600 rounded-full"></div>}
       </div>
+
+      
 
       {/* DELETE BUTTON - hover only */}
       <button

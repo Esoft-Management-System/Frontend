@@ -7,7 +7,6 @@ import BatchModal from "../../../components/common/BatchModal";
 interface Batch {
   id: string;
   name: string;
-  studentCount: number;
 }
 
 const Dashboard = () => {
@@ -15,11 +14,10 @@ const Dashboard = () => {
   const [selectedBatch, setSelectedBatch] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleAddBatch = (batchName: string, studentCount: number) => {
+  const handleAddBatch = (batchName: string,) => {
     const newBatch: Batch = {
       id: `batch-${Date.now()}`,
       name: batchName,
-      studentCount,
     };
 
     setBatches((prev) => [...prev, newBatch]);
@@ -49,7 +47,6 @@ const Dashboard = () => {
               <BatchCard
                 key={batch.id}
                 batchName={batch.name}
-                studentCount={batch.studentCount}
                 isSelected={selectedBatch === batch.id}
                 onClick={() => setSelectedBatch(batch.id)}
               />
