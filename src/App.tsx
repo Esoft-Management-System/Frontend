@@ -16,14 +16,18 @@ const App = () => {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<Login />} />
+        {/* Dashboard - Default Route for Testing */}
+        <Route path="/" element={<DashboardLayout><StaffDashboard/></DashboardLayout>} />
+        <Route path="/dashboard/staff" element={<DashboardLayout><StaffDashboard/></DashboardLayout>} />
+        
+        {/* Authentication Routes */}
+        <Route path="/login" element={<Login />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
         <Route path="/staff" element={<StaffLogin />} />
         <Route path="/studentregister" element={<StudentRegister />} />
         <Route path="/StaffRequestLogin" element={<StaffRequestLogin />} />
         <Route path="/OTPform" element={<OTPform />} />
         <Route path="/SetNewPassword" element={<SetNewPassword />} />
-        <Route path="/dashboard/staff" element={<DashboardLayout><StaffDashboard/></DashboardLayout>} />
       </Routes>
       <ToastContainer position="top-right" autoClose={4000} theme="colored" />
     </div>
@@ -31,4 +35,5 @@ const App = () => {
 };
 
 export default App;
+
 
